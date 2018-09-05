@@ -17,6 +17,8 @@ let screenWidth;
 let fretWidth;
 /*Коэффициент для расчёта радиуса точки-подсветки лада*/
 let lightRadiusRate = 2.5;
+/*Минимальная ширина контейнера для нормального отображения грифа*/
+let minWidth = 800;
 
 
 
@@ -33,6 +35,8 @@ window.onload = function() {
     
     document.getElementById('count-of-frets').value = maxFret-1;
     document.getElementById('string-count').value = 7;
+    
+    //console.log( document.getElementsByTagName('nav')[0].scrollHeight);
 }
 window.onresize = function() {
     redrawNeck();
@@ -59,7 +63,7 @@ var setHTMLSelectors = function() {
 /*Получение параметров окна и установка динамической ширины*/
 /*TODO - определить константу - минимальную ширину*/
 var getScreenParameters = function() {
-    screenWidth = window.innerWidth * 0.99;
+    screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
     fretWidth = screenWidth/maxFret;
 }
 
@@ -105,9 +109,18 @@ var setDynamicStyles = function() {
 
 /*Устанавливает контейнеры-строки (струны)*/
 var setRows = function() {
-    
-    /*Установка номеров ладов*/
-    /*TODO вынести в отдельную функцию*/
+    setFretNumbers();    
+    zeroFretNotes.forEach(function(item,i){ 
+        let string = document.createElement('div');
+        string.className = 'string';
+        string.id = 'string-' + (i+1);
+        string.innerHTML = '<div class="fret">'+item+'</div>';
+        document.getElementById('neck').appendChild(string);
+    });
+}
+
+/*Установка номеров ладов*/
+var setFretNumbers = function() {
     let th = document.createElement('div');
     th.id = 'table-head';
     th.className = 'string';
@@ -119,15 +132,6 @@ var setRows = function() {
         fretNum.innerHTML = i;
         document.getElementById('table-head').appendChild(fretNum);
     }
-    /*Конец установки номеров ладов*/
-    
-    zeroFretNotes.forEach(function(item,i){ 
-        let string = document.createElement('div');
-        string.className = 'string';
-        string.id = 'string-' + (i+1);
-        string.innerHTML = '<div class="fret">'+item+'</div>';
-        document.getElementById('neck').appendChild(string);
-    });
 }
 
 /*Рисует все ноты на грифе до лада maxFret*/
@@ -146,11 +150,15 @@ var setNeck = function() {
 }
 
 /*Подсвечивает все ноты, которые находятся в массиве selection*/
-/*TODO - Убрать jQuery*/
 var lightUpNotes = function(selection) {
-    $('.light').css('background-color', 'transparent');
+    Array.from(document.querySelectorAll('.light')).forEach( function(item) {
+        item.style.backgroundColor = 'transparent';
+    });
+    
     selection.forEach( function(item){
-        $('[data-note="'+item+'"]>span.light').css('background-color', 'yellow');
+        Array.from(document.querySelectorAll('[data-note="'+item+'"]>span.light')).forEach( function(item) {
+            item.style.backgroundColor = 'yellow';
+        });
     });
 }
 
