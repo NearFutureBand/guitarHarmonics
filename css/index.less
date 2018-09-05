@@ -1,0 +1,91 @@
+//TODO убрать синюю рамку у селектов
+
+*{
+    font-family: arial;
+    text-transform: uppercase;
+    color: #333;
+}
+nav, .neck{
+    background-color: #eee;
+    margin-bottom: 1vh;
+}
+.wrapper{
+    padding: 1vh 1%;
+}
+
+input, select, option{
+    border: none;
+    background-color: transparent;
+}
+input:hover, select:hover, option:hover{
+    transition: background .5s ease;
+    background-color: #888;
+    cursor: pointer;
+}
+select {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+input{
+    padding-top: 8px;
+    padding-bottom: 7px;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+
+
+nav{
+    .navbar-brand{
+        width: 5%;
+        img{
+            width: 100%;
+        }
+    }
+    .form{
+        
+    }
+}
+
+
+
+
+.neck{
+    width: 100%;
+    font-size: 0.8rem;
+    padding: 1vh 0;
+    .string{
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        border-bottom: 1px solid #999;
+        .fret{
+            text-align: center;
+            padding-top: 1rem;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            border-left: 1px solid #999;
+            .light{
+                position: absolute;
+                z-index: 1;
+            }
+            
+            .note{
+                z-index: 2;
+                color: black;
+            }
+        }
+        .fret:first-child{
+            border-right: 2px solid #333;
+            border-left: none;
+        }
+    }
+    .string:first-child .fret{
+        padding-top: 0;
+    }
+}
+    
+
+    
+        

@@ -1,0 +1,58 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="shortcut icon" href="logo.png" type="image/png">
+    <title>Guitar Harmonics App - Virtual Destructor</title> 
+</head> 
+    <body>
+       <div class="wrapper">
+          <nav class="navbar">
+                <form class="form-inline" id="fret-count-selection">
+                    <select id="count-of-frets">
+                        
+                    </select>
+                    <input type="submit" value="neck">
+                </form>
+                <form class="form-inline" id="zero-notes-selection">
+                    <select id="zero-notes">
+                        <option>EBGDAEB</option>
+                        <option>EBGDAEA</option>
+                    </select>
+                </form>
+                <form class="form-inline" id="string-count-selection">
+                    <select id="string-count">
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                </form>
+                <form class="form-inline" id="harmonic-selection">
+                    <select id="harmonic-note">
+                   
+                   </select>
+                   <select id="harmonic-type">
+                       <option>Minor</option>
+                       <option>Major</option>
+                   </select>
+                   <input type="submit" value="harmonic">
+                   <input type="button" value="clear">
+                </form>      
+                
+                <a class="navbar-brand" href="#"><img src="logo.png"></a>        
+            </nav>
+            
+           <div class="neck" id="neck">
+               
+           </div>
+           
+       </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/index.js"></script>
+    </body> 
+</html>

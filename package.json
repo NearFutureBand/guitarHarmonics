@@ -1,0 +1,22 @@
+{
+  "main": "index.html",
+  "name": "Guitar Harmonics",
+  "description": "small app to find harmonics faster",
+  "version": "0.1.0",
+  "keywords": [ "guitar", "harmonics", "virual destructor" ],
+  "window": {
+    "title": "Guitar Harmonics App",
+    "icon": "logo.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 800,
+    "height": 500,
+      "resizable": true,
+    "position": "center",
+    "min_width": 400,
+    "min_height": 200
+  },
+  "webkit": {
+    "plugin": true
+  }
+}
