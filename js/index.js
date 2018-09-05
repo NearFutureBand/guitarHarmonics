@@ -32,6 +32,7 @@ window.onload = function() {
     setHTMLSelectors();
     
     document.getElementById('count-of-frets').value = maxFret-1;
+    document.getElementById('string-count').value = 7;
 }
 window.onresize = function() {
     redrawNeck();
@@ -192,7 +193,7 @@ document.getElementById('button-clear').addEventListener('click', function() {
 });
 
 document.getElementById('string-count').addEventListener('change', function() {
-    changeStringCount('string-count');
+    changeStringCount(this.value);
 });
 
 /*OTHER*/
