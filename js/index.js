@@ -24,21 +24,14 @@ let lightRadiusRate = 2.5;
 
 
 window.onload = function() {
-    let stringCount = 7;
-    document.getElementById('string-count').value = stringCount;
-    zeroFretNotes = defaultTuning.slice(0, stringCount);
     
-    drawScheme();
-    redrawNeck();
+    //установка количества струн по уолчанию - там внутри есть отрисовка
+    changeStringCount(7);
     
+    //Установка выпадающих меню на основе существующих массивов
     setHTMLSelectors();
     
-    //TODO вынести в функцию "установить дефолтные значения"
-    //TODO сделать дефолтную установку на 7 струн и вызывать функцию обрезки того массива
-    document.getElementById('string-count').value = "7";
-    document.getElementById('count-of-frets').value = "19";
-    
-    
+    document.getElementById('count-of-frets').value = maxFret-1;
 }
 window.onresize = function() {
     redrawNeck();
@@ -137,10 +130,8 @@ var setRows = function() {
 }
 
 /*Рисует все ноты на грифе до лада maxFret*/
-/*TODO - сократить в размерах, сделать покрасивее*/
 var setNeck = function() {
     zeroFretNotes.forEach(function(item,I) {
-        
         let index = sequence.indexOf(item);
         
         for(let i = 1; i < maxFret; i++) {
@@ -175,6 +166,9 @@ var findHarmonic = function(note, type) {
     lightUpNotes(selection);
 }
 
+
+/*EVENTS*/
+
 /*Событие вызова новой гаммы*/
 Array.from(document.querySelectorAll('#harmonic-note, #harmonic-type')).forEach( function(item) {
     item.addEventListener("change", function() {
@@ -198,10 +192,16 @@ document.getElementById('button-clear').addEventListener('click', function() {
 });
 
 document.getElementById('string-count').addEventListener('change', function() {
-    zeroFretNotes = defaultTuning.slice(0, document.getElementById('string-count').value);
+    changeStringCount('string-count');
+});
+
+/*OTHER*/
+
+var changeStringCount = function(value) {
+    zeroFretNotes = defaultTuning.slice(0, value);
     drawScheme();
     redrawNeck();
-})
+}
 
 /*Возвращает следующую ноту относительно данной по требуемому интервалу*/
 var getNextNote = function(note, distance) {
