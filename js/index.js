@@ -30,14 +30,13 @@ window.onload = function() {
     
     document.getElementById('string-count').value = "7";
     document.getElementById('count-of-frets').value = "19";
-    
+    document.getElementById('string-count').value = "7";
 }
 window.onresize = function() {
     redrawNeck();
 };
 
 /*Добавление HTML контента и управляющих элементов*/
-/*TODO - добавить возможность выбора количества ладов*/
 var setHTMLSelectors = function() {
     let targetForm = document.getElementById('harmonic-selection');
     
@@ -80,23 +79,28 @@ var redrawNeck = function() {
 }
 
 /*Установка ширин и высот для ячеек с нотами*/
-/*TODO - Убрать jQuery*/
 var setDynamicStyles = function() {
     
     //Настройка ширины ладов
-    $('.fret').css('width',fretWidth+'px');
-    
+    Array.from(document.querySelectorAll('.fret')).forEach( function(item) {
+        item.style.width = fretWidth+'px';
+        item.style.paddingTop = fretWidth/2;
+    });
     //Настройка размеров подсветки ладов
-    $('.light')
-        .css('width',fretWidth/lightRadiusRate+'px')
-        .css('height', fretWidth/lightRadiusRate+'px')
-        .css('border-radius',fretWidth+'px')
-        .css('z-index',0)
-        .css('left', (fretWidth/2 - fretWidth/lightRadiusRate/2)+'px');
+    
+    Array.from( document.querySelector('.light')).forEach( function(item) {
+        item.style.width = fretWidth/lightRadiusRate+'px';
+        item.style.height = fretWidth/lightRadiusRate+'px';
+        item.style.borderRadius = fretWidth+'px';
+        item.style.zIndex = 0;
+        item.style.left = (fretWidth/2 - fretWidth/lightRadiusRate/2)+'px';
+    });
     
     //Имитация струн и разделителей ладов
-    $('.fret').css('padding-top', fretWidth/2);
-    $('.string:first-child .fret').css('padding-top',0);
+    Array.from(document.querySelectorAll('.string:first-child .fret')).forEach( function(item) {
+        item.style.paddingTop = 0;    
+    });
+    //$('.string:first-child .fret').css('padding-top',0);
 }
 
 /*Устанавливает контейнеры-строки (струны)*/
@@ -136,11 +140,8 @@ var setNeck = function() {
         for(let i = 1; i < maxFret; i++) {
             let fret = document.createElement('div');
             fret.className = 'fret';
-            let fretInnerHTML = '<span class="light"></span><span class="note">';
-            fretInnerHTML += sequence[ checkIndex( i + index)];
             fret.setAttribute('data-note', sequence[ checkIndex( i + index)]);
-            fretInnerHTML += '</span>';
-            fret.innerHTML = fretInnerHTML;
+            fret.innerHTML = '<span class="light"></span><span class="note">' + String( sequence[ checkIndex( i + index)] ) + '</span>';
             document.getElementById('string-'+(I+1)).appendChild(fret);
         }
     });
@@ -176,12 +177,16 @@ Array.from(document.querySelectorAll('#harmonic-note, #harmonic-type')).forEach(
         findHarmonic(harmonicNote, harmonicType);
     });
 });
-    
+
 
 document.getElementById('count-of-frets').addEventListener('change', function() {
     maxFret = Number(document.getElementById('count-of-frets').value) + 1;
     drawScheme();
     redrawNeck();
+});
+
+document.getElementById('button-clear').addEventListener('click', function() {
+    $('.light').css('background-color', 'transparent');
 });
 
 /*Возвращает следующую ноту относительно данной по требуемому интервалу*/
