@@ -10,27 +10,38 @@
 </head> 
     <body>
        <div class="wrapper">
-          <nav class="navbar">
-                <form class="form-inline" id="fret-count-selection">
+          <nav>
+            <form id="fret-count-selection">
+               <div class="name">NECK LENGTH</div>
+               <div class="form">
                     <select id="count-of-frets">
-                        
+                    
                     </select>
-                </form>
-                <form class="form-inline" id="zero-notes-selection">
-                    <select id="zero-notes">
+                </div>
+            </form>
+            <!--<form id="zero-notes-selection">
+               <div class="name">TUNING</div>
+                <div class="form">
+                   <select id="zero-notes">
                         <option>EBGDAEB</option>
                         <option>EBGDAEA</option>
                     </select>
-                </form>
-                <form class="form-inline" id="string-count-selection">
+                </div>
+            </form>-->
+            <form id="string-count-selection">
+               <div class="name">STRINGS</div>
+               <div class="form">
                     <select id="string-count">
                         <option>5</option>
                         <option>6</option>
                         <option>7</option>
                         <option>8</option>
                     </select>
-                </form>
-                <form class="form-inline" id="harmonic-selection">
+                </div>
+            </form>
+            <form id="harmonic-selection">
+               <div class="name">HARMONIC</div>
+               <div class="form">
                     <select id="harmonic-note">
                    
                    </select>
@@ -38,18 +49,18 @@
                        <option>Minor</option>
                        <option>Major</option>
                    </select>
-                   
-                </form>      
-                <input type="button" value="clear" id="button-clear">
-                
-                <a class="navbar-brand" href="#"><img src="logo.png"></a>        
-            </nav>
+               </div>
+            </form>      
+            <input type="button" value="clear" id="button-clear">
             
-           <div class="neck" id="neck">
-               
-           </div>
+            <a class="app-logo" href="#" alt="Virtual Destructor"><img src="logo.png" alt="Virtual Destructor"></a>        
+        </nav>
+            
+        <div class="neck" id="neck">
+            
+        </div>
            
-       </div>
+        </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/index.js"></script>

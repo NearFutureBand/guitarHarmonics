@@ -7,7 +7,8 @@ let minorHarmRule = "ТПТТПТТ";
 let majorHarmRule = "ТТПТТТП";
 /*Открытые ноты на грифе гитары начиная с первой*/
 //let zeroFretNotes = ["Ми","Си","Соль","Рэ","Ля","Ми"];
-let zeroFretNotes = ["E","B","G","D","A","E","B"];
+let defaultTuning = ["E","B","G","D","A","E","B","G"];
+let zeroFretNotes; //= ["E","B","G","D","A","E","B"];
 /*Максимальное число отображаемых ладов (12-30)*/
 let maxFret = 20;
 /*Ширина контейнера для грифа - для адаптивности*/
@@ -23,14 +24,21 @@ let lightRadiusRate = 2.5;
 
 
 window.onload = function() {
+    let stringCount = 7;
+    document.getElementById('string-count').value = stringCount;
+    zeroFretNotes = defaultTuning.slice(0, stringCount);
+    
     drawScheme();
     redrawNeck();
     
     setHTMLSelectors();
     
+    //TODO вынести в функцию "установить дефолтные значения"
+    //TODO сделать дефолтную установку на 7 струн и вызывать функцию обрезки того массива
     document.getElementById('string-count').value = "7";
     document.getElementById('count-of-frets').value = "19";
-    document.getElementById('string-count').value = "7";
+    
+    
 }
 window.onresize = function() {
     redrawNeck();
@@ -39,7 +47,6 @@ window.onresize = function() {
 /*Добавление HTML контента и управляющих элементов*/
 var setHTMLSelectors = function() {
     let targetForm = document.getElementById('harmonic-selection');
-    
     
     let op;
     sequence.forEach( function(item) {
@@ -88,7 +95,7 @@ var setDynamicStyles = function() {
     });
     //Настройка размеров подсветки ладов
     
-    Array.from( document.querySelector('.light')).forEach( function(item) {
+    Array.from( document.querySelectorAll('.light')).forEach( function(item) {
         item.style.width = fretWidth/lightRadiusRate+'px';
         item.style.height = fretWidth/lightRadiusRate+'px';
         item.style.borderRadius = fretWidth+'px';
@@ -100,7 +107,6 @@ var setDynamicStyles = function() {
     Array.from(document.querySelectorAll('.string:first-child .fret')).forEach( function(item) {
         item.style.paddingTop = 0;    
     });
-    //$('.string:first-child .fret').css('padding-top',0);
 }
 
 /*Устанавливает контейнеры-строки (струны)*/
@@ -174,20 +180,28 @@ Array.from(document.querySelectorAll('#harmonic-note, #harmonic-type')).forEach(
     item.addEventListener("change", function() {
         let harmonicNote = document.getElementById('harmonic-note').value;
         let harmonicType = document.getElementById('harmonic-type').value;
+        console.log('as');
         findHarmonic(harmonicNote, harmonicType);
     });
 });
 
-
+//Событие запроса изменения количества отображаемых ладов
 document.getElementById('count-of-frets').addEventListener('change', function() {
     maxFret = Number(document.getElementById('count-of-frets').value) + 1;
     drawScheme();
     redrawNeck();
 });
 
+//Кнопка "очистить"
 document.getElementById('button-clear').addEventListener('click', function() {
     $('.light').css('background-color', 'transparent');
 });
+
+document.getElementById('string-count').addEventListener('change', function() {
+    zeroFretNotes = defaultTuning.slice(0, document.getElementById('string-count').value);
+    drawScheme();
+    redrawNeck();
+})
 
 /*Возвращает следующую ноту относительно данной по требуемому интервалу*/
 var getNextNote = function(note, distance) {
