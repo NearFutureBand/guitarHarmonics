@@ -23,6 +23,9 @@ let minWidth = 800;
 
 
 //TODO: languages
+//при переключении количества струн, выбранная гамма сбивается
+//добавить пункт выбора "нет гаммы" вместо "clear"
+//попробовать переместить название ноты внутрь круга-подсветки
 
 
 window.onload = function() {
@@ -35,8 +38,6 @@ window.onload = function() {
     
     document.getElementById('count-of-frets').value = maxFret-1;
     document.getElementById('string-count').value = 7;
-    
-    //console.log( document.getElementsByTagName('nav')[0].scrollHeight);
 }
 window.onresize = function() {
     redrawNeck();
@@ -61,7 +62,6 @@ var setHTMLSelectors = function() {
 }
 
 /*Получение параметров окна и установка динамической ширины*/
-/*TODO - определить константу - минимальную ширину*/
 var getScreenParameters = function() {
     screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
     fretWidth = screenWidth/maxFret;

@@ -2,7 +2,7 @@
   "main": "index.html",
   "name": "Guitar Harmonics",
   "description": "small app to find harmonics faster",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [ "guitar", "harmonics", "virual destructor" ],
   "window": {
     "title": "Guitar Harmonics App",
