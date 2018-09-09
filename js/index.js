@@ -20,24 +20,29 @@ let lightRadiusRate = 2.5;
 /*Минимальная ширина контейнера для нормального отображения грифа*/
 let minWidth = 800;
 
+let defaultCountOfStrings = 7;
+
 
 
 //TODO: languages
-//при переключении количества струн, выбранная гамма сбивается
-//добавить пункт выбора "нет гаммы" вместо "clear"
 //попробовать переместить название ноты внутрь круга-подсветки
-
+//Наиболее часто выбираемые гаммы помещать в списке выше
+//стили для селекторов - цвета и текст по середине
 
 window.onload = function() {
-    
-    //установка количества струн по уолчанию - там внутри есть отрисовка
-    changeStringCount(7);
-    
+    //Обрезка массива открытых нот под заданное количество струн
+    zeroFretNotes = defaultTuning.slice(0, defaultCountOfStrings);
+    //Отрисовка базовой схемы
+    drawScheme();
     //Установка выпадающих меню на основе существующих массивов
     setHTMLSelectors();
+    //Установка дефолтных значений в выпадающие меню
+    document.getElementById('count-of-frets').value = maxFret - 1;
+    document.getElementById('string-count').value = defaultCountOfStrings;
+    document.getElementById('harmonic-note').value = '-';
     
-    document.getElementById('count-of-frets').value = maxFret-1;
-    document.getElementById('string-count').value = 7;
+    //Подстройка стилей
+    redrawNeck();
 }
 window.onresize = function() {
     redrawNeck();
@@ -45,13 +50,18 @@ window.onresize = function() {
 
 /*Добавление HTML контента и управляющих элементов*/
 var setHTMLSelectors = function() {
-    let targetForm = document.getElementById('harmonic-selection');
+    let target = document.getElementById('harmonic-note');
     
     let op;
-    sequence.forEach( function(item) {
+    sequence.forEach( function(item, i) {
         op = document.createElement('option');
+        if( i == 0 ) {
+            op.innerHTML = "-";
+            target.appendChild(op);
+            op = document.createElement('option');
+        }
         op.innerHTML = item;
-        document.getElementById('harmonic-note').appendChild(op);
+        target.appendChild(op);
     });
     
     for(let i = 12; i < 25 ; i++) {
@@ -61,10 +71,12 @@ var setHTMLSelectors = function() {
     }
 }
 
-/*Получение параметров окна и установка динамической ширины*/
-var getScreenParameters = function() {
-    screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
-    fretWidth = screenWidth/maxFret;
+/*Перерисовывает всю схему под новое количество струн и заново устанавливат выбранную ранее гамму*/
+var changeStringCount = function(value) {
+    zeroFretNotes = defaultTuning.slice(0, value);
+    drawScheme();
+    redrawNeck();
+    setHarmonic();
 }
 
 /*Отрисовать блоки - выполняется один раз*/
@@ -107,6 +119,78 @@ var setDynamicStyles = function() {
     });
 }
 
+/*Возвращает массив нот входящих в заданную гамму*/
+var findHarmonic = function(note, type) {
+    let selection = [];
+    if( note != '-') {
+        let currentNote = note;
+        let rule = (type == 'Minor') ? minorHarmRule : majorHarmRule;
+        
+        for( let i = 0; i < rule.length; i++) {
+            currentNote = getNextNote(currentNote,rule[i]);  
+            selection.push(currentNote);
+        }
+    }
+    lightUpNotes(selection);   
+}
+
+
+/*EVENTS*/
+
+/*Событие вызова новой гаммы*/
+Array.from(document.querySelectorAll('#harmonic-note, #harmonic-type')).forEach( function(item) {
+    item.addEventListener("change", function() {
+        setHarmonic();
+    });
+});
+
+/*Функция получения данных из формы для подсветки новой гаммы*/
+var setHarmonic = function() {
+    let harmonicNote = document.getElementById('harmonic-note').value;
+    let harmonicType = document.getElementById('harmonic-type').value;
+    findHarmonic(harmonicNote, harmonicType);
+}
+
+//Событие запроса изменения количества отображаемых ладов
+document.getElementById('count-of-frets').addEventListener('change', function() {
+    maxFret = Number(document.getElementById('count-of-frets').value) + 1;
+    drawScheme();
+    redrawNeck();
+});
+
+document.getElementById('string-count').addEventListener('change', function() {
+    changeStringCount(this.value);
+});
+
+
+
+
+
+/*OTHER*/
+
+/*Возвращает следующую ноту относительно данной по требуемому интервалу*/
+var getNextNote = function(note, distance) {
+    let index = sequence.indexOf(note);
+    if(distance == 'Т') {
+        index+=2;
+    } else {
+        index++;
+    }
+    return sequence[ checkIndex(index)];
+}
+
+/*Замыкает массив sequence всех нот, чтобы индекс был не больше 12*/
+var checkIndex = function (index) {
+    while( !(index < 12) ) index -=12;
+    return index;
+}
+
+/*Получение параметров окна и установка динамической ширины*/
+var getScreenParameters = function() {
+    screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
+    fretWidth = screenWidth/maxFret;
+}
+
 /*Устанавливает контейнеры-строки (струны)*/
 var setRows = function() {
     setFretNumbers();    
@@ -116,6 +200,20 @@ var setRows = function() {
         string.id = 'string-' + (i+1);
         string.innerHTML = '<div class="fret">'+item+'</div>';
         document.getElementById('neck').appendChild(string);
+    });
+}
+/*Рисует все ноты на грифе до лада maxFret*/
+var setNeck = function() {
+    zeroFretNotes.forEach(function(item,I) {
+        let index = sequence.indexOf(item);
+        
+        for(let i = 1; i < maxFret; i++) {
+            let fret = document.createElement('div');
+            fret.className = 'fret';
+            fret.setAttribute('data-note', sequence[ checkIndex( i + index)]);
+            fret.innerHTML = '<span class="light"></span><span class="note">' + String( sequence[ checkIndex( i + index)] ) + '</span>';
+            document.getElementById('string-'+(I+1)).appendChild(fret);
+        }
     });
 }
 
@@ -134,97 +232,18 @@ var setFretNumbers = function() {
     }
 }
 
-/*Рисует все ноты на грифе до лада maxFret*/
-var setNeck = function() {
-    zeroFretNotes.forEach(function(item,I) {
-        let index = sequence.indexOf(item);
-        
-        for(let i = 1; i < maxFret; i++) {
-            let fret = document.createElement('div');
-            fret.className = 'fret';
-            fret.setAttribute('data-note', sequence[ checkIndex( i + index)]);
-            fret.innerHTML = '<span class="light"></span><span class="note">' + String( sequence[ checkIndex( i + index)] ) + '</span>';
-            document.getElementById('string-'+(I+1)).appendChild(fret);
-        }
-    });
-}
-
 /*Подсвечивает все ноты, которые находятся в массиве selection*/
 var lightUpNotes = function(selection) {
     Array.from(document.querySelectorAll('.light')).forEach( function(item) {
         item.style.backgroundColor = 'transparent';
     });
     
-    selection.forEach( function(item){
-        Array.from(document.querySelectorAll('[data-note="'+item+'"]>span.light')).forEach( function(item) {
-            item.style.backgroundColor = 'yellow';
+    if( selection != []) {
+        selection.forEach( function(item){
+            Array.from(document.querySelectorAll('[data-note="'+item+'"]>span.light')).forEach( function(item) {
+                item.style.backgroundColor = 'yellow';
+            });
         });
-    });
+    }     
 }
 
-/*Возвращает массив нот входящих в заданную гамму*/
-var findHarmonic = function(note, type) {
-    let rule = (type == 'Minor') ? minorHarmRule : majorHarmRule;
-    let selection = [], currentNote = note;
-    
-    for( let i = 0; i < rule.length; i++) {
-        currentNote = getNextNote(currentNote,rule[i]);  
-        selection.push(currentNote);
-    }
-    
-    lightUpNotes(selection);
-}
-
-
-/*EVENTS*/
-
-/*Событие вызова новой гаммы*/
-Array.from(document.querySelectorAll('#harmonic-note, #harmonic-type')).forEach( function(item) {
-    item.addEventListener("change", function() {
-        let harmonicNote = document.getElementById('harmonic-note').value;
-        let harmonicType = document.getElementById('harmonic-type').value;
-        console.log('as');
-        findHarmonic(harmonicNote, harmonicType);
-    });
-});
-
-//Событие запроса изменения количества отображаемых ладов
-document.getElementById('count-of-frets').addEventListener('change', function() {
-    maxFret = Number(document.getElementById('count-of-frets').value) + 1;
-    drawScheme();
-    redrawNeck();
-});
-
-//Кнопка "очистить"
-document.getElementById('button-clear').addEventListener('click', function() {
-    $('.light').css('background-color', 'transparent');
-});
-
-document.getElementById('string-count').addEventListener('change', function() {
-    changeStringCount(this.value);
-});
-
-/*OTHER*/
-
-var changeStringCount = function(value) {
-    zeroFretNotes = defaultTuning.slice(0, value);
-    drawScheme();
-    redrawNeck();
-}
-
-/*Возвращает следующую ноту относительно данной по требуемому интервалу*/
-var getNextNote = function(note, distance) {
-    let index = sequence.indexOf(note);
-    if(distance == 'Т') {
-        index+=2;
-    } else {
-        index++;
-    }
-    return sequence[ checkIndex(index)];
-}
-
-/*Замыкает массив sequence всех нот, чтобы индекс был не больше 12*/
-var checkIndex = function (index) {
-    while( !(index < 12) ) index -=12;
-    return index;
-}
