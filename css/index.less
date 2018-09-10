@@ -77,7 +77,7 @@ nav{
         border-bottom: 1px solid #999;
         .fret{
             text-align: center;
-            padding-top: 1rem;
+            //padding-top: 1rem;
             position: relative;
             display: flex;
             justify-content: center;
@@ -85,12 +85,14 @@ nav{
             .light{
                 position: absolute;
                 z-index: 1;
+                //overflow: visible;
+                .note{
+                    z-index: 2;
+                    color: black;
+                }
             }
             
-            .note{
-                z-index: 2;
-                color: black;
-            }
+            
         }
         .fret:first-child{
             border-right: 2px solid #333;

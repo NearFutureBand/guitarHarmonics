@@ -15,6 +15,10 @@ let maxFret = 20;
 let screenWidth;
 /*Ширина одного лада - вычисляется относительно ширины экрана*/
 let fretWidth;
+/*Высота одного лада - вычисляется относительно ширины*/
+let fretHeight;
+/*Текущий размер шрифта в пикселях*/
+let fontSize = 10;
 /*Коэффициент для расчёта радиуса точки-подсветки лада*/
 let lightRadiusRate = 2.5;
 /*Минимальная ширина контейнера для нормального отображения грифа*/
@@ -28,6 +32,8 @@ let defaultCountOfStrings = 7;
 //попробовать переместить название ноты внутрь круга-подсветки
 //Наиболее часто выбираемые гаммы помещать в списке выше
 //стили для селекторов - цвета и текст по середине
+//адекватная высота грифа
+//подстройка размеров шрифта
 
 window.onload = function() {
     //Обрезка массива открытых нот под заданное количество струн
@@ -52,6 +58,7 @@ window.onresize = function() {
 var setHTMLSelectors = function() {
     let target = document.getElementById('harmonic-note');
     
+    //Установка пунктов меню "выбор тоники гаммы"
     let op;
     sequence.forEach( function(item, i) {
         op = document.createElement('option');
@@ -64,6 +71,7 @@ var setHTMLSelectors = function() {
         target.appendChild(op);
     });
     
+    //Установка пунктов меню "выбор количества ладов"
     for(let i = 12; i < 25 ; i++) {
         op = document.createElement('option');
         op.innerHTML = i;
@@ -96,21 +104,31 @@ var redrawNeck = function() {
 }
 
 /*Установка ширин и высот для ячеек с нотами*/
+/*Оптимизировать селектор*/
 var setDynamicStyles = function() {
     
     //Настройка ширины ладов
     Array.from(document.querySelectorAll('.fret')).forEach( function(item) {
         item.style.width = fretWidth+'px';
         item.style.paddingTop = fretWidth/2;
+        item.style.height = fretHeight+'px';
     });
-    //Настройка размеров подсветки ладов
     
+    //Настройка размеров шрифта
+    Array.from(document.querySelectorAll('.note')).forEach( function(item) {
+        item.style.fontSize = fontSize;
+    });
+    
+    //Позиционирование текста
+    
+    //Настройка размеров подсветки ладов
     Array.from( document.querySelectorAll('.light')).forEach( function(item) {
         item.style.width = fretWidth/lightRadiusRate+'px';
         item.style.height = fretWidth/lightRadiusRate+'px';
         item.style.borderRadius = fretWidth+'px';
         item.style.zIndex = 0;
         item.style.left = (fretWidth/2 - fretWidth/lightRadiusRate/2)+'px';
+        item.style.top = fontSize;
     });
     
     //Имитация струн и разделителей ладов
@@ -151,7 +169,7 @@ var setHarmonic = function() {
     findHarmonic(harmonicNote, harmonicType);
 }
 
-//Событие запроса изменения количества отображаемых ладов
+/*Событие запроса изменения количества отображаемых ладов*/
 document.getElementById('count-of-frets').addEventListener('change', function() {
     maxFret = Number(document.getElementById('count-of-frets').value) + 1;
     drawScheme();
@@ -185,10 +203,12 @@ var checkIndex = function (index) {
     return index;
 }
 
-/*Получение параметров окна и установка динамической ширины*/
+/*Получение параметров окна и установка динамической ширины, вычисление зависимых параметров*/
 var getScreenParameters = function() {
     screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
-    fretWidth = screenWidth/maxFret;
+    fretWidth = screenWidth / maxFret;
+    fretHeight = fretWidth * 0.5;
+    fontSize = fretHeight/2;
 }
 
 /*Устанавливает контейнеры-строки (струны)*/
@@ -211,7 +231,7 @@ var setNeck = function() {
             let fret = document.createElement('div');
             fret.className = 'fret';
             fret.setAttribute('data-note', sequence[ checkIndex( i + index)]);
-            fret.innerHTML = '<span class="light"></span><span class="note">' + String( sequence[ checkIndex( i + index)] ) + '</span>';
+            fret.innerHTML = '<div class="light"><span class="note">' + String( sequence[ checkIndex( i + index)] ) + '</span></div>';
             document.getElementById('string-'+(I+1)).appendChild(fret);
         }
     });
@@ -240,7 +260,7 @@ var lightUpNotes = function(selection) {
     
     if( selection != []) {
         selection.forEach( function(item){
-            Array.from(document.querySelectorAll('[data-note="'+item+'"]>span.light')).forEach( function(item) {
+            Array.from(document.querySelectorAll('[data-note="'+item+'"]>.light')).forEach( function(item) {
                 item.style.backgroundColor = 'yellow';
             });
         });
