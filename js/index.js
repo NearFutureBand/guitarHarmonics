@@ -29,11 +29,11 @@ let defaultCountOfStrings = 7;
 
 
 //TODO: languages
-//попробовать переместить название ноты внутрь круга-подсветки
 //Наиболее часто выбираемые гаммы помещать в списке выше
-//стили для селекторов - цвета и текст по середине
-//адекватная высота грифа
-//подстройка размеров шрифта
+//стили для селекторов - переделать в div и обычные popup
+//открытые ноты не подчиняются общим стилям - обобщить алгоритм
+//номерам ладов тоже нужна подстройка стилей
+
 
 window.onload = function() {
     //Обрезка массива открытых нот под заданное количество струн
@@ -116,7 +116,7 @@ var setDynamicStyles = function() {
     
     //Настройка размеров шрифта
     Array.from(document.querySelectorAll('.note')).forEach( function(item) {
-        item.style.fontSize = fontSize;
+        item.style.fontSize = fontSize + 'px';
     });
     
     //Позиционирование текста
@@ -128,7 +128,7 @@ var setDynamicStyles = function() {
         item.style.borderRadius = fretWidth+'px';
         item.style.zIndex = 0;
         item.style.left = (fretWidth/2 - fretWidth/lightRadiusRate/2)+'px';
-        item.style.top = fontSize;
+        item.style.top = fontSize + 'px';
     });
     
     //Имитация струн и разделителей ладов
@@ -208,7 +208,7 @@ var getScreenParameters = function() {
     screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
     fretWidth = screenWidth / maxFret;
     fretHeight = fretWidth * 0.5;
-    fontSize = fretHeight/2;
+    fontSize = fretHeight / 2.5;
 }
 
 /*Устанавливает контейнеры-строки (струны)*/

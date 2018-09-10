@@ -9,7 +9,7 @@ nav, .neck{
     margin-bottom: 1vh;
 }
 .wrapper{
-    padding: 1vh 1%;
+    padding: 1vh;
 }
 
 input, select, option{
@@ -20,10 +20,6 @@ input:hover, select:hover, option:hover{
     transition: background .5s ease;
     background-color: #888;
     cursor: pointer;
-}
-select {
-    padding-top: 10px;
-    padding-bottom: 10px;
 }
 input{
     padding-top: 8px;
@@ -55,6 +51,10 @@ nav{
         .form{
             display: flex;
             justify-content: center;
+            select{
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
         }
     }
     .name{
@@ -74,17 +74,20 @@ nav{
         width: 100%;
         display: flex;
         justify-content: flex-start;
-        border-bottom: 1px solid #999;
+        border-bottom: 1px solid #bbb;
         .fret{
             text-align: center;
             //padding-top: 1rem;
             position: relative;
             display: flex;
             justify-content: center;
-            border-left: 1px solid #999;
+            border-left: 1px solid #bbb;
             .light{
                 position: absolute;
                 z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 //overflow: visible;
                 .note{
                     z-index: 2;
