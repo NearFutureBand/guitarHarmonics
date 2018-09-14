@@ -27,21 +27,28 @@ let minWidth = 800;
 let defaultCountOfStrings = 7;
 
 
+//TODO:
+//написать единую функцию отрисовки с параметрами: количество струн
+//инкапсуляция, проверить нижние уровни
+//сделать единый объект neck (можно класс) и все глоб. переменные сделать его свойствами
+//гриф на svg графику (использовать имена string и fret вместо row и т.д.)
+//
 
-//TODO: languages
+//languages
 //Наиболее часто выбираемые гаммы помещать в списке выше
 //стили для селекторов - переделать в div и обычные popup
 //открытые ноты не подчиняются общим стилям - обобщить алгоритм
 //номерам ладов тоже нужна подстройка стилей
 
 
-window.onload = function() {
-    //Обрезка массива открытых нот под заданное количество струн
-    zeroFretNotes = defaultTuning.slice(0, defaultCountOfStrings);
-    //Отрисовка базовой схемы
-    drawScheme();
+window.addEventListener('load', function() {
+    
+    //вызов отрисовки грифа
+    initGuitarHarmonics(defaultCountOfStrings);
+    
     //Установка выпадающих меню на основе существующих массивов
     setHTMLSelectors();
+    
     //Установка дефолтных значений в выпадающие меню
     document.getElementById('count-of-frets').value = maxFret - 1;
     document.getElementById('string-count').value = defaultCountOfStrings;
@@ -49,10 +56,20 @@ window.onload = function() {
     
     //Подстройка стилей
     redrawNeck();
-}
-window.onresize = function() {
+});
+
+window.addEventListener('resize', function() {
     redrawNeck();
-};
+});
+
+var initGuitarHarmonics = function(countOfStrings) {
+    
+    //Обрезка массива открытых нот под заданное количество струн
+    zeroFretNotes = defaultTuning.slice(0, countOfStrings);
+    
+    //Отрисовка базовой схемы
+    drawScheme();
+}
 
 /*Добавление HTML контента и управляющих элементов*/
 var setHTMLSelectors = function() {
@@ -103,8 +120,13 @@ var redrawNeck = function() {
     setDynamicStyles();
 }
 
-/*Установка ширин и высот для ячеек с нотами*/
-/*Оптимизировать селектор*/
+/*Установка ширин и высот для ячеек с нотами
+** изменяет:
+* ширину ладов
+* размер шрифта
+* размер подсветок ладов
+* 
+Оптимизировать селектор*/
 var setDynamicStyles = function() {
     
     //Настройка ширины ладов
@@ -119,7 +141,7 @@ var setDynamicStyles = function() {
         item.style.fontSize = fontSize + 'px';
     });
     
-    //Позиционирование текста
+    //Позиционирование текста - WTF?
     
     //Настройка размеров подсветки ладов
     Array.from( document.querySelectorAll('.light')).forEach( function(item) {
@@ -129,11 +151,6 @@ var setDynamicStyles = function() {
         item.style.zIndex = 0;
         item.style.left = (fretWidth/2 - fretWidth/lightRadiusRate/2)+'px';
         item.style.top = fontSize + 'px';
-    });
-    
-    //Имитация струн и разделителей ладов
-    Array.from(document.querySelectorAll('.string:first-child .fret')).forEach( function(item) {
-        item.style.paddingTop = 0;    
     });
 }
 
@@ -203,14 +220,13 @@ var checkIndex = function (index) {
     return index;
 }
 
-/*Получение параметров окна и установка динамической ширины, вычисление зависимых параметров*/
+/*Получение параметров окна и определение динамической ширины, вычисление зависимых параметров*/
 var getScreenParameters = function() {
     screenWidth = window.innerWidth >= minWidth ? window.innerWidth * 0.99 : minWidth;
     fretWidth = screenWidth / maxFret;
     fretHeight = fretWidth * 0.5;
     fontSize = fretHeight / 2.5;
 }
-
 /*Устанавливает контейнеры-строки (струны)*/
 var setRows = function() {
     setFretNumbers();    
