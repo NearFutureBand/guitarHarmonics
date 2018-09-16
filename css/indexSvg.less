@@ -1,0 +1,62 @@
+*{
+    font-family: arial;
+    text-transform: uppercase;
+    color: #333;
+    outline: none;
+}
+nav, .neck{
+    background-color: #eee;
+    margin-bottom: 1vh;
+}
+.wrapper{
+    padding: 1vh;
+}
+
+input, select, option{
+    border: none;
+    background-color: transparent;
+}
+input:hover, select:hover, option:hover{
+    transition: background .5s ease;
+    background-color: #888;
+    cursor: pointer;
+}
+input{
+    padding-top: 8px;
+    padding-bottom: 7px;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    padding: 1vh 1%;
+    width: 100%;
+    .app-logo{
+        width: 5%;
+        max-width: 50px;
+        max-height: 50px;
+        img{
+            width: 100%;
+        }
+    }
+    form{
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        .form{
+            display: flex;
+            justify-content: center;
+            select{
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+        }
+    }
+    .name{
+        text-align: center;
+    }
+}
