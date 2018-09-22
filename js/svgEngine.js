@@ -1,6 +1,5 @@
 class Neck {
     constructor(maxFret, stringsCount) {
-        //постоянные начальные данные
         this.minWidth = 800;
         this.maxFret = maxFret;
         this.noteSequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
@@ -23,10 +22,7 @@ class Neck {
             .selectAll('rect.fret')
                 .data(this.noteSequence)
                 .enter().append('rect')
-                    /*.attr('x', (d,i) => i * this.fretWidth )
-                    .attr('y', j * this.fretHeight)
-                    .attr('width', this.fretWidth)
-                    .attr('height', this.fretHeight)*/
+                    .attr('class', 'fret')
                     .attr('fill', 'rgba(0,0,0,.1)')
                     .attr('stroke-width', 1)
                     .attr('stroke', 'rgba(0,0,0,.9)')
@@ -36,7 +32,7 @@ class Neck {
     }
     
     restyle() {
-        console.log('asdas');
+        
         let neckWidth = parseInt( getComputedStyle( document.getElementById('neck') ).width ),
         screenWidth = ( neckWidth > this.minWidth ) ? neckWidth : this.minWidth,
         fretWidth = screenWidth / this.maxFret,
@@ -47,13 +43,11 @@ class Neck {
         
         for( let j = 0; j < this.stringsCount + 1; j++) {
             
-            //console.log( d3.select('#string-' + j) );
             d3.select('#string-' + j)
-                .attr('y', fretWidth * j)
             .selectAll('rect.fret')
                 .data(this.noteSequence)
                     .attr('x', (d,i) => i * fretWidth )
-                    //.attr('y', j * fretHeight)
+                    .attr('y', j * fretHeight)
                     .attr('width', fretWidth)
                     .attr('height', fretHeight);
         }
@@ -62,6 +56,7 @@ class Neck {
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
+    создать три группы - strings, frets, notes, lights
 --------------------*/
 
 
