@@ -6,31 +6,10 @@ class Neck {
         this.noteSequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
         this.defaultTuning = ["Z","E","B","G","D","A","E","B","G"];
         this.stringsCount = stringsCount;
-        this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);
-        
-        
-        //графические параметры
-        this.fretWidth = 0;
-        this.fretHeight = 0;
-        this.fontSize = 0;
-        this.height = 0;
-        
-        
-    }
-    
-    updateStyle() {
-        
-        let neckWidth = d3.select('#neck').attr('width');
-        let screenWidth = neckWidth >= this.minWidth ? neckWidth : this.minWidth;
-        this.fretWidth = screenWidth / this.maxFret;
-        this.fretHeight = this.fretWidth * 0.5;
-        this.fontSize = this.fretHeight / 2.5;
-        this.height = this.getNeckHeight();
+        this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);     
     }
     
     drawScheme() {
-        this.updateStyle();
-        
         d3.select("#neck")
             .selectAll("g.string")
               .data(this.zeroFretNotes)
@@ -44,39 +23,47 @@ class Neck {
             .selectAll('rect.fret')
                 .data(this.noteSequence)
                 .enter().append('rect')
-                    .attr('x', (d,i) => i * this.fretWidth )
+                    /*.attr('x', (d,i) => i * this.fretWidth )
                     .attr('y', j * this.fretHeight)
                     .attr('width', this.fretWidth)
-                    .attr('height', this.fretHeight)
-                    .attr('fill', 'rgba(0,0,0,.3)')
+                    .attr('height', this.fretHeight)*/
+                    .attr('fill', 'rgba(0,0,0,.1)')
                     .attr('stroke-width', 1)
                     .attr('stroke', 'rgba(0,0,0,.9)')
                 .exit().remove();
         }
+        this.restyle();
     }
     
-    setFretStyle() {
-        this.updateStyle();
+    restyle() {
+        console.log('asdas');
+        let neckWidth = parseInt( getComputedStyle( document.getElementById('neck') ).width ),
+        screenWidth = ( neckWidth > this.minWidth ) ? neckWidth : this.minWidth,
+        fretWidth = screenWidth / this.maxFret,
+        fretHeight = fretWidth * 0.5,
+        fontSize = fretHeight / 2.5;
+        
+        d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) );
         
         for( let j = 0; j < this.stringsCount + 1; j++) {
+            
+            //console.log( d3.select('#string-' + j) );
             d3.select('#string-' + j)
+                .attr('y', fretWidth * j)
             .selectAll('rect.fret')
                 .data(this.noteSequence)
-                    .attr('x', (d,i) => i * this.fretWidth )
-                    .attr('y', j * this.fretHeight)
-                    .attr('width', this.fretWidth)
-                    .attr('height', this.fretHeight)
-                    .attr('fill', 'rgba(0,0,0,.3)')
-                    .attr('stroke-width', 1)
-                    .attr('stroke', 'rgba(0,0,0,.9)')
+                    .attr('x', (d,i) => i * fretWidth )
+                    //.attr('y', j * fretHeight)
+                    .attr('width', fretWidth)
+                    .attr('height', fretHeight);
         }
     }
-    
-    getNeckHeight() {
-        return d3.select("#neck")
-        .attr('height', this.fretHeight * this.stringsCount + 1);
-    }
 }
+
+/*TODO--------------
+    инициализация меню со стартовыми параметрами
+--------------------*/
+
 
 //переменная для объекта класса neck - в нем всё
 var neck;
@@ -87,7 +74,8 @@ window.addEventListener('load', function() {
     //neck.setFretStyle();
 });
 window.addEventListener('resize', function() {
-    setSvgContainerParameters();
+    //setSvgContainerParameters();
     //drawNeck();
+    neck.restyle();
 });
 
