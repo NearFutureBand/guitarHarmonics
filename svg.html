@@ -9,16 +9,73 @@
     <title>Guitar Harmonics App - Virtual Destructor</title> 
 </head> 
     <body>
-       <div class="wrapper">
-          <nav>
-            <form id="fret-count-selection">
+        <div class="wrapper">
+            <nav>
+                <div class="menu-block neck-length">
+                    <div class="name">NECK LENGTH</div>
+                    <div class="lists">
+                        <div class="list">
+                            <div class="label"><span class="icon-arrow_drop_down_circle"></span> 11</div>
+                            <div class="other">
+                                <div>12</div>
+                                <div>13</div>
+                                <div>14</div>
+                                <div>15</div>
+                                <div>16</div>
+                                <div>17</div>
+                                <div>18</div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="menu-block">
+                    <div class="name">STRINGS</div>
+                    <div class="lists">
+                        <div class="list">
+                            <div class="label"><span class="icon-arrow_drop_down_circle"></span> 6</div>
+                            <div class="other">
+                                <div>7</div>
+                                <div>8</div>
+                                <div>9</div>
+                                <div>4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-block">
+                    <div class="name">HARMONIC</div>
+                    <div class="lists">
+                        <div class="list list-2">
+                            <div class="label"><span class="icon-arrow_drop_down_circle"></span>  - </div>
+                            <div class="other">
+                                <div>C</div>
+                                <div>C#</div>
+                                <div>D</div>
+                                <div>G</div>
+                            </div>
+                        </div>
+                        <div class="list list-2">
+                            <div class="label"><span class="icon-arrow_drop_down_circle"></span> Minor</div>
+                            <div class="other">
+                                <div>Minor</div>
+                                <div>Major</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--
+              <form id="fret-count-selection">
                <div class="name">NECK LENGTH</div>
                <div class="form">
                     <select id="count-of-frets">
                     
                     </select>
                 </div>
-            </form>
+            </form>-->
+            
             <!--<form id="zero-notes-selection">
                <div class="name">TUNING</div>
                 <div class="form">
@@ -28,7 +85,7 @@
                     </select>
                 </div>
             </form>-->
-            <form id="string-count-selection">
+            <!--<form id="string-count-selection">
                <div class="name">STRINGS</div>
                <div class="form">
                     <select id="string-count">
@@ -50,9 +107,13 @@
                        <option>Major</option>
                    </select>
                </div>
-            </form>
-            
-            <a class="app-logo" href="#" alt="Virtual Destructor"><img src="logo.png" alt="Virtual Destructor"></a>        
+            </form>-->
+            <div class="menu-block">
+                <a class="app-logo" href="#" alt="Virtual Destructor">
+                    <img src="logo.png" alt="Virtual Destructor">
+                </a>
+            </div>
+                  
         </nav>
             
         <svg class="neck" id="neck">

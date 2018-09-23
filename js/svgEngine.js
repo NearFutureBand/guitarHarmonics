@@ -51,7 +51,7 @@ class Neck {
         lightRadius = fretWidth / 5,
         stringGroup = null;
         
-        d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) );
+        d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) + fretHeight / 2 );
         
         for( let j = 0; j < this.stringsCount + 1; j++) {
             stringGroup = d3.select('#string-' + j);
@@ -85,7 +85,7 @@ class Neck {
             .data(this.noteSequence)
             .enter().append('rect')
                 .attr('class', 'fret')
-                .attr('fill', 'rgba(0,0,0,.1)')
+                .attr('fill', 'transparent')
                 .attr('stroke-width', 1)
                 .attr('stroke', 'rgba(0,0,0,.9)')
             .exit().remove();
@@ -113,7 +113,7 @@ class Neck {
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
-    создать три группы - strings, frets, notes, lights
+    создание массива data для правильного заполнения грифа (с номерами ладов и zeroFretNotes)
 --------------------*/
 
 
