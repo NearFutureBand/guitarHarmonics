@@ -1,3 +1,12 @@
+class Fret {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        //отношение ширины лада к радиусу подсветки
+        this.lightRadiusRate = 2.5;
+    }
+}
+
 class Neck {
     constructor(maxFret, stringsCount) {
         this.minWidth = 800;
@@ -9,17 +18,33 @@ class Neck {
     }
     
     drawScheme() {
-        d3.select("#neck")
-            .selectAll("g.string")
+        let svgEl = d3.select('#neck');
+        /*d3.select('#neck')
+            .selectAll('g')
+            .data(groupNames)
+                .enter().append('g')
+                    .attr('class', (d) => d )
+                .exit().remove();
+        */
+        svgEl.selectAll('g.string')
               .data(this.zeroFretNotes)
                 .enter().append("g")
                     .attr('class', 'string')
                     .attr('id', (d,i) => 'string-'+i)
                 .exit().remove();
         
+        let stringGroup = null;
+        
         for( let j = 0; j < this.stringsCount + 1; j++) {
-            d3.select('#string-' + j)
-            .selectAll('rect.fret')
+            stringGroup = d3.select('#string-' + j);
+            
+            stringGroup.append('g').attr('class','frets');
+            stringGroup.append('g').attr('class','notes');
+            stringGroup.append('g').attr('class','lights');
+            
+            //frets
+            stringGroup.select('g.frets')
+                .selectAll('rect.fret')
                 .data(this.noteSequence)
                 .enter().append('rect')
                     .attr('class', 'fret')
@@ -27,6 +52,8 @@ class Neck {
                     .attr('stroke-width', 1)
                     .attr('stroke', 'rgba(0,0,0,.9)')
                 .exit().remove();
+            
+            //stringGroup.selectAll()*/
         }
         this.restyle();
     }
@@ -43,7 +70,7 @@ class Neck {
         
         for( let j = 0; j < this.stringsCount + 1; j++) {
             
-            d3.select('#string-' + j)
+            d3.select('#string-' + j + ' g.frets')
             .selectAll('rect.fret')
                 .data(this.noteSequence)
                     .attr('x', (d,i) => i * fretWidth )
