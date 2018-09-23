@@ -3,7 +3,7 @@ class Fret {
         this.x = x;
         this.y = y;
         //отношение ширины лада к радиусу подсветки
-        this.lightRadiusRate = 2.5;
+        
     }
 }
 
@@ -11,9 +11,9 @@ class Neck {
     constructor(maxFret, stringsCount) {
         this.minWidth = 800;
         this.maxFret = maxFret;
+        this.stringsCount = stringsCount;
         this.noteSequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
         this.defaultTuning = ["Z","E","B","G","D","A","E","B","G"];
-        this.stringsCount = stringsCount;
         this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);     
     }
     
@@ -34,35 +34,9 @@ class Neck {
             stringGroup.append('g').attr('class','lights'); 
             stringGroup.append('g').attr('class','notes');
             
-            //frets
-            stringGroup.select('g.frets')
-                .selectAll('rect.fret')
-                .data(this.noteSequence)
-                .enter().append('rect')
-                    .attr('class', 'fret')
-                    .attr('fill', 'rgba(0,0,0,.1)')
-                    .attr('stroke-width', 1)
-                    .attr('stroke', 'rgba(0,0,0,.9)')
-                .exit().remove();
-            
-            //notes
-            stringGroup.select('g.notes')
-                .selectAll('text.note')
-                .data(this.noteSequence)
-                .enter().append('text')
-                    .text( (d) => d)
-                    .attr('class', 'note')
-                    .attr('font-family','arial')
-                .exit().remove();
-            
-            //lights
-            stringGroup.select('g.lights')
-                .selectAll('circ.light')
-                .data(this.noteSequence)
-                .enter().append('circle')
-                    .attr('class', 'light')
-                    .attr('fill', 'yellow')
-                .exit().remove();
+            this.setFrets(stringGroup);
+            this.setNotes(stringGroup);
+            this.setLights(stringGroup);
         }
         this.restyle();
     }
@@ -74,6 +48,7 @@ class Neck {
         fretWidth = screenWidth / this.maxFret,
         fretHeight = fretWidth * 0.5,
         fontSize = fretHeight / 2.5,
+        lightRadius = fretWidth / 5,
         stringGroup = null;
         
         d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) );
@@ -90,16 +65,49 @@ class Neck {
             
             stringGroup.select('g.notes').selectAll('text.note')
                 .data(this.noteSequence)
-                    .attr('x', (d, i) => i * fretWidth )
-                    .attr('y', j * fretHeight)
+                    .attr('x', (d, i) => i * fretWidth + fretWidth / 2 )
+                    .attr('y', (j + 1) * fretHeight)
             
             stringGroup.select('g.lights').selectAll('circle.light')
                 .data(this.noteSequence)
-                    .attr('cx', (d, i) => i * fretWidth )
-                    .attr('cy', j * fretHeight)
-                    .attr('r', fretHeight/2);
+                    .attr('cx', (d, i) => i * fretWidth + fretWidth / 2)
+                    .attr('cy', (j + 1) * fretHeight )
+                    .attr('r', () => lightRadius);
             
         }
+    }
+    
+    
+    /*incapsulated*/
+    setFrets(mountPlace) {
+        mountPlace.select('g.frets')
+            .selectAll('rect.fret')
+            .data(this.noteSequence)
+            .enter().append('rect')
+                .attr('class', 'fret')
+                .attr('fill', 'rgba(0,0,0,.1)')
+                .attr('stroke-width', 1)
+                .attr('stroke', 'rgba(0,0,0,.9)')
+            .exit().remove();
+    }
+    setNotes(mountPlace) {
+        mountPlace.select('g.notes')
+            .selectAll('text.note')
+            .data(this.noteSequence)
+            .enter().append('text')
+                .text( (d) => d)
+                .attr('class', 'note')
+                .attr('font-family','arial')
+            .exit().remove();
+    }
+    setLights(mountPlace) {
+        mountPlace.select('g.lights')
+            .selectAll('circ.light')
+            .data(this.noteSequence)
+            .enter().append('circle')
+                .attr('class', 'light')
+                .attr('fill', 'rgb(255,255,0,.8)')
+            .exit().remove();
     }
 }
 
