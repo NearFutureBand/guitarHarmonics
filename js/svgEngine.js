@@ -1,12 +1,3 @@
-class Fret {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        //отношение ширины лада к радиусу подсветки
-        
-    }
-}
-
 class Neck {
     constructor(maxFret, stringsCount) {
         this.minWidth = 800;
@@ -14,7 +5,9 @@ class Neck {
         this.stringsCount = stringsCount;
         this.noteSequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
         this.defaultTuning = ["Z","E","B","G","D","A","E","B","G"];
-        this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);     
+        this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);
+        this.frets = [];
+        this.setFretsData();
     }
     
     drawScheme() {
@@ -34,8 +27,8 @@ class Neck {
             stringGroup.append('g').attr('class','lights'); 
             stringGroup.append('g').attr('class','notes');
             
-            this.setFrets(stringGroup);
-            this.setNotes(stringGroup);
+            this.setFrets(stringGroup, j);
+            this.setNotes(stringGroup, j);
             this.setLights(stringGroup);
         }
         this.restyle();
@@ -73,16 +66,14 @@ class Neck {
                     .attr('cx', (d, i) => i * fretWidth + fretWidth / 2)
                     .attr('cy', (j + 1) * fretHeight )
                     .attr('r', () => lightRadius);
-            
         }
     }
     
-    
-    /*incapsulated*/
-    setFrets(mountPlace) {
+    /*private*/
+    setFrets(mountPlace, stringNumber) {
         mountPlace.select('g.frets')
             .selectAll('rect.fret')
-            .data(this.noteSequence)
+            .data(this.frets[stringNumber])
             .enter().append('rect')
                 .attr('class', 'fret')
                 .attr('fill', 'transparent')
@@ -90,10 +81,10 @@ class Neck {
                 .attr('stroke', 'rgba(0,0,0,.9)')
             .exit().remove();
     }
-    setNotes(mountPlace) {
+    setNotes(mountPlace, stringNumber) {
         mountPlace.select('g.notes')
             .selectAll('text.note')
-            .data(this.noteSequence)
+            .data(this.frets[stringNumber])
             .enter().append('text')
                 .text( (d) => d)
                 .attr('class', 'note')
@@ -109,6 +100,34 @@ class Neck {
                 .attr('fill', 'rgb(255,255,0,.8)')
             .exit().remove();
     }
+    setFretsData() {
+        let i = 0, j = 0,
+        oneString = [];
+        this.frets.push([0]);
+        
+        for(i = 1; i < this.stringsCount + 1; i++) {
+            oneString = [];
+            for(j = 0; j < this.maxFret; j++) {
+                if(i == 1) this.frets[0].push(j+1);
+                if(j == 0) oneString.push( this.zeroFretNotes[ i ]);
+                oneString.push( this.getNextNote( oneString[j], 'П') );
+            }
+            this.frets.push( oneString);
+        }
+    }
+    checkIndex(index) {
+        while( !(index < 12) ) index -=12;
+        return index;
+    }
+    getNextNote(note, distance) {
+        let index = this.noteSequence.indexOf(note);
+        if(distance == 'Т') {
+            index+=2;
+        } else {
+            index++;
+        }
+        return this.noteSequence[ this.checkIndex(index)];
+    }
 }
 
 /*TODO--------------
@@ -123,11 +142,8 @@ var neck;
 window.addEventListener('load', function() {
     neck = new Neck(12, 6);
     neck.drawScheme();
-    //neck.setFretStyle();
 });
 window.addEventListener('resize', function() {
-    //setSvgContainerParameters();
-    //drawNeck();
     neck.restyle();
 });
 
