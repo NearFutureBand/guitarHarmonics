@@ -18,20 +18,12 @@ class Neck {
     }
     
     drawScheme() {
-        let svgEl = d3.select('#neck');
-        /*d3.select('#neck')
-            .selectAll('g')
-            .data(groupNames)
-                .enter().append('g')
-                    .attr('class', (d) => d )
-                .exit().remove();
-        */
-        svgEl.selectAll('g.string')
-              .data(this.zeroFretNotes)
-                .enter().append("g")
-                    .attr('class', 'string')
-                    .attr('id', (d,i) => 'string-'+i)
-                .exit().remove();
+        d3.select('#neck').selectAll('g.string')
+            .data(this.zeroFretNotes)
+            .enter().append("g")
+                .attr('class', 'string')
+                .attr('id', (d,i) => 'string-'+i)
+            .exit().remove();
         
         let stringGroup = null;
         
@@ -39,8 +31,8 @@ class Neck {
             stringGroup = d3.select('#string-' + j);
             
             stringGroup.append('g').attr('class','frets');
+            stringGroup.append('g').attr('class','lights'); 
             stringGroup.append('g').attr('class','notes');
-            stringGroup.append('g').attr('class','lights');
             
             //frets
             stringGroup.select('g.frets')
@@ -53,7 +45,24 @@ class Neck {
                     .attr('stroke', 'rgba(0,0,0,.9)')
                 .exit().remove();
             
-            //stringGroup.selectAll()*/
+            //notes
+            stringGroup.select('g.notes')
+                .selectAll('text.note')
+                .data(this.noteSequence)
+                .enter().append('text')
+                    .text( (d) => d)
+                    .attr('class', 'note')
+                    .attr('font-family','arial')
+                .exit().remove();
+            
+            //lights
+            stringGroup.select('g.lights')
+                .selectAll('circ.light')
+                .data(this.noteSequence)
+                .enter().append('circle')
+                    .attr('class', 'light')
+                    .attr('fill', 'yellow')
+                .exit().remove();
         }
         this.restyle();
     }
@@ -64,19 +73,32 @@ class Neck {
         screenWidth = ( neckWidth > this.minWidth ) ? neckWidth : this.minWidth,
         fretWidth = screenWidth / this.maxFret,
         fretHeight = fretWidth * 0.5,
-        fontSize = fretHeight / 2.5;
+        fontSize = fretHeight / 2.5,
+        stringGroup = null;
         
         d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) );
         
         for( let j = 0; j < this.stringsCount + 1; j++) {
+            stringGroup = d3.select('#string-' + j);
             
-            d3.select('#string-' + j + ' g.frets')
-            .selectAll('rect.fret')
+            stringGroup.select('g.frets').selectAll('rect.fret')
                 .data(this.noteSequence)
-                    .attr('x', (d,i) => i * fretWidth )
+                    .attr('x', (d, i) => i * fretWidth )
                     .attr('y', j * fretHeight)
                     .attr('width', fretWidth)
                     .attr('height', fretHeight);
+            
+            stringGroup.select('g.notes').selectAll('text.note')
+                .data(this.noteSequence)
+                    .attr('x', (d, i) => i * fretWidth )
+                    .attr('y', j * fretHeight)
+            
+            stringGroup.select('g.lights').selectAll('circle.light')
+                .data(this.noteSequence)
+                    .attr('cx', (d, i) => i * fretWidth )
+                    .attr('cy', j * fretHeight)
+                    .attr('r', fretHeight/2);
+            
         }
     }
 }
