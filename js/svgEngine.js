@@ -8,6 +8,7 @@ class Neck {
         this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);
         this.frets = [];
         this.setFretsData();
+        console.log(this.frets);
     }
     
     drawScheme() {
@@ -29,7 +30,7 @@ class Neck {
             
             this.setFrets(stringGroup, j);
             this.setNotes(stringGroup, j);
-            this.setLights(stringGroup);
+            this.setLights(stringGroup, j);
         }
         this.restyle();
     }
@@ -38,10 +39,12 @@ class Neck {
         
         let neckWidth = parseInt( getComputedStyle( document.getElementById('neck') ).width ),
         screenWidth = ( neckWidth > this.minWidth ) ? neckWidth : this.minWidth,
-        fretWidth = screenWidth / this.maxFret,
+        fretWidth = screenWidth / ( this.maxFret + 1 ),
         fretHeight = fretWidth * 0.5,
         fontSize = fretHeight / 2.5,
         lightRadius = fretWidth / 5,
+        textPaddingBottom = fretHeight * 0.05,
+        textAlignCoeff = fretWidth * 0.05, 
         stringGroup = null;
         
         d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) + fretHeight / 2 );
@@ -50,19 +53,20 @@ class Neck {
             stringGroup = d3.select('#string-' + j);
             
             stringGroup.select('g.frets').selectAll('rect.fret')
-                .data(this.noteSequence)
+                .data(this.frets[j])
                     .attr('x', (d, i) => i * fretWidth )
                     .attr('y', j * fretHeight)
                     .attr('width', fretWidth)
                     .attr('height', fretHeight);
             
             stringGroup.select('g.notes').selectAll('text.note')
-                .data(this.noteSequence)
-                    .attr('x', (d, i) => i * fretWidth + fretWidth / 2 )
-                    .attr('y', (j + 1) * fretHeight)
+                .data(this.frets[j])
+                    .attr('x', (d, i) => i * fretWidth + fretWidth / 2  - textAlignCoeff )
+                    .attr('y', (j + 1) * fretHeight  - textPaddingBottom )
+                    .attr('font-size', fontSize)
             
             stringGroup.select('g.lights').selectAll('circle.light')
-                .data(this.noteSequence)
+                .data(this.frets[j])
                     .attr('cx', (d, i) => i * fretWidth + fretWidth / 2)
                     .attr('cy', (j + 1) * fretHeight )
                     .attr('r', () => lightRadius);
@@ -76,7 +80,7 @@ class Neck {
             .data(this.frets[stringNumber])
             .enter().append('rect')
                 .attr('class', 'fret')
-                .attr('fill', 'transparent')
+                .attr('fill', (d, i) => (stringNumber != 0 && i != 0)? 'transparent' : 'rgba(0,0,0,.2)')
                 .attr('stroke-width', 1)
                 .attr('stroke', 'rgba(0,0,0,.9)')
             .exit().remove();
@@ -91,14 +95,17 @@ class Neck {
                 .attr('font-family','arial')
             .exit().remove();
     }
-    setLights(mountPlace) {
-        mountPlace.select('g.lights')
-            .selectAll('circ.light')
-            .data(this.noteSequence)
-            .enter().append('circle')
-                .attr('class', 'light')
-                .attr('fill', 'rgb(255,255,0,.8)')
-            .exit().remove();
+    setLights(mountPlace, stringNumber) {
+        if(stringNumber != 0) {
+            mountPlace.select('g.lights')
+                .selectAll('circ.light')
+                .data(this.frets[stringNumber])
+                .enter().append('circle')
+                    .attr('class', 'light')
+                    .attr('fill', 'rgb(255,255,0,.9)')
+                    .attr('data-note', (d) => d)
+                .exit().remove();
+        }
     }
     setFretsData() {
         let i = 0, j = 0,
@@ -132,7 +139,8 @@ class Neck {
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
-    создание массива data для правильного заполнения грифа (с номерами ладов и zeroFretNotes)
+    разная ширина блоков меню
+    константы из рестайла вынести в переменные-параметры
 --------------------*/
 
 
