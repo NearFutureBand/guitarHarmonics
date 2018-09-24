@@ -18,6 +18,15 @@ class Neck {
         this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);
         /*Заполение массива frets*/
         this.setFretsData();
+        
+        /*Графические параметры*/
+        this.widthHeightRate = 0.5;
+        this.fontSizeRate = 0.3;
+        this.lightRadiusRate = 0.2;
+        this.textPaddingBottomRate = 0.05;
+        this.textAlignCoeff = 0.05;
+        
+        this.menuUtility();
     }
     
     drawScheme() {
@@ -49,11 +58,11 @@ class Neck {
         let neckWidth = parseInt( getComputedStyle( document.getElementById('neck') ).width ),
         screenWidth = ( neckWidth > this.minWidth ) ? neckWidth : this.minWidth,
         fretWidth = screenWidth / ( this.maxFret + 1 ),
-        fretHeight = fretWidth * 0.5,
-        fontSize = fretHeight / 3,
-        lightRadius = fretWidth / 5,
-        textPaddingBottom = fretHeight * 0.05,
-        textAlignCoeff = fretWidth * 0.05, 
+        fretHeight = fretWidth * this.widthHeightRate,
+        fontSize = fretHeight * this.fontSizeRate,
+        lightRadius = fretWidth * this.lightRadiusRate,
+        textPaddingBottom = fretHeight * this.textPaddingBottomRate,
+        textAlignCoeff = fretWidth * this.textAlignCoeff,
         stringGroup = null;
         
         d3.select("#neck").attr('height', fretHeight * (this.stringsCount + 1) + fretHeight / 2 );
@@ -107,8 +116,17 @@ class Neck {
         });
     }
     
-    menuUnity() {
-        
+    menuUtility() {
+        this.setMenuHarmonic();
+        this.setMenuStringCount();
+        this.setMenuNeckLength();
+        this.addMenuEventListeners();
+    }
+    addMenuEventListeners() {
+        d3.selectAll('.other>div')
+            .on('click', function(e) {
+                console.log(this);
+            })
     }
     
     
@@ -177,11 +195,41 @@ class Neck {
         d3.selectAll('circle.light')
             .attr('fill', 'transparent')
     }
+    setMenuHarmonic() {
+        d3.select('.menu-block.harmonic .lists .list-1 .other')
+            .selectAll('div')
+            .data( ['-'].concat( this.noteSequence) )
+            .enter().append('div')
+                .text( (d) => d)
+    }
+    //TODO - посмотреть создание массива по заданному правилу
+    setMenuStringCount() {
+        let data = [];
+        for( let i = 4; i <= 9; i++) {
+            data.push(i);
+        }
+        d3.select('.menu-block.string-count .list .other')
+            .selectAll('div')
+            .data(data)
+            .enter().append('div')
+                .text( (d) => d)
+    }
+    setMenuNeckLength() {
+        let data = [];
+        for( let i = 12; i <= 24; i++) {
+            data.push(i);
+        }
+        d3.select('.menu-block.neck-length .list .other')
+            .selectAll('div')
+            .data(data)
+            .enter().append('div')
+                .text( (d) => d)
+    }
 }
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
-    константы из рестайла вынести в переменные-параметры
+    события нажатия на пункты меню
 --------------------*/
 
 
