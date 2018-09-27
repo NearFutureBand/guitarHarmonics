@@ -57,14 +57,25 @@ nav{
         flex-flow: column;
         align-items: center;
         justify-content: center;
+        width: auto;
         .lists{
             display: flex;
-            width: 100%;
+            //width: 100%;
             justify-content: center;
             .list{
                 width: 100%;
                 position: relative;
+                margin-left: 5%;
+                margin-right: 5%;
                 .label{
+                    display: flex;
+                    flex-flow: nowrap;
+                    align-items: center;
+                    align-content: center;
+                    span:first-child{
+                        margin-left: 5%;
+                        margin-right: 5%;
+                    }
                 }
                 .other{
                     display: none;
@@ -72,16 +83,24 @@ nav{
                     position: absolute;
                     top: 100%;
                     left: 0;
+                    
                     box-shadow: 2px 5px 5px rgba(0,0,0,.3);
                     div{
                         background-color: @lightGray;
                         width: 100%;
+                        text-align: center;
                     }
                 }
-                .label, .other>div {
-                    padding: 5% 0;
-                    text-align: center;
-                }
+            }
+            .list-1{
+                padding-left: 2%;
+                padding-right: 2%;
+                width: 30%;
+            }
+            .list-2{
+                width: 70%;
+                padding-left: 2%;
+                padding-left: 2%;
             }
         }
         

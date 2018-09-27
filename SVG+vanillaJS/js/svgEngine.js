@@ -229,13 +229,12 @@ class Neck {
                 .attr('stroke', 'rgba(0,0,0,.9)')
                 .attr('id', (d,i) => 'fr-' + ( stringNumber * this.maxFret + i))
                 .on('click', function() {
-                    let targetLightId =  this.id.split('-')[1];
-                    d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
-                    $.tabLink.addNote( d3.select('#nt-' + targetLightId).text());
+                    $.clickOnFret(this.id.split('-')[1]);
                 })
             .exit().remove();
     }
     setNotes(mountPlace, stringNumber) {
+        let $ = this;
         mountPlace.select('g.notes')
             .selectAll('text.note')
             .data(this.frets[stringNumber])
@@ -246,9 +245,7 @@ class Neck {
                 .attr('fill','rgba(0,0,0,.7)')
                 .attr('id', (d,i) => 'nt-' + (stringNumber * this.maxFret + i))
                 .on('click', function() {
-                    let targetLightId =  this.id.split('-')[1];
-                    d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
-                    $.tabLink.addNote( d3.select('#nt-' + targetLightId).text());
+                    $.clickOnFret(this.id.split('-')[1]);
                 })
             .exit().remove();
     }
@@ -356,17 +353,21 @@ class Neck {
             d3.select('#string-' + j).selectAll('g').remove();
         }
     }
+    clickOnFret(id) {
+        d3.select('#lt-' + id).attr('fill', d3.select('#lt-' + id).attr('fill') == 'yellow' ? 'transparent' : 'yellow' );
+        this.tabLink.addNote( d3.select('#nt-' + id).text());
+    }
 }
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
-    оптимизировать ручную подсветку ладов
+    оптимизировать ручную подсветку ладов - функцию clickOnFret
     навести порядок в addMenuEventLis()
     добавить возможность изменять размер шрифта
     добавить возможность локализировать выбор гаммы - нажатия на номера ладов
     пентатоники
-    фикс стилей для меню выбора гамм
-    вывод нажатых ладов в псевдо-табы
+    изменить ширину выпадающих списков - вынести absolute блок на уровень где паддинга еще нет - создать доп контейнер сразу внтури .menu-block - одному присвоить паддинг и положить внутрь название, а в другой положить выпадуху
+    вывод нажатых ладов в псевдо-табы - получение номера строки и лада
     инкапсулированный neck.init()
 --------------------*/
 
