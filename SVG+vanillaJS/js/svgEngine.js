@@ -1,3 +1,59 @@
+class Tab {
+    constructor(stringCount, tuning) {
+        this.notes = [];
+        this.stringCount = stringCount;
+        this.tuning = tuning;
+        
+        this.noteRadius = 30;
+        this.notePadding = 10;
+        this.drawScheme();
+        
+    }
+    
+    drawScheme() {
+        d3.select('#tab').append('g').attr('class','tmp-string');
+        d3.select('#tab').append('g').attr('class','text');
+        this.redrawScheme();
+    }
+    redrawScheme() {
+        let texts = d3.select('g.text')
+            .selectAll('text.tex')
+            .data(this.notes);
+        texts.enter().append('text')
+            .text(d => d)
+            .attr('font-size', this.noteRadius / 2)
+            .attr('class', 'tex')
+        texts.exit().remove();
+        
+        
+        let notes = d3.select('g.tmp-string')
+            .selectAll('circle.note')
+            .data(this.notes);
+        notes.enter().append('circle')
+            .attr('r', this.noteRadius)
+            .attr('class','note')
+            .attr('data-tab-note', d => d)
+            .attr('fill', 'yellow')
+        notes.exit().remove();
+        this.restyle();
+    }
+    restyle() {
+        d3.selectAll('g.tmp-string circle.note')
+            .data(this.notes)
+            .attr('cx', (d, i) => (i + 1 )* ( 2 * this.noteRadius + this.notePadding ))
+            .attr('cy', "50%")
+        d3.selectAll('g.text text.tex')
+            .data(this.notes)
+            .attr('x', (d,i) => (i + 1 )* ( 2 * this.noteRadius + this.notePadding ))
+            .attr('y', "50%")
+    }
+    
+    addNote(note) {
+        this.notes.push(note);
+        this.redrawScheme();
+    }
+}
+
 class Neck {
     constructor(maxFret, stringsCount) {
         this.minWidth = 800;
@@ -27,6 +83,8 @@ class Neck {
         this.textAlignCoeff = 0.05;
         
         this.menuUtility();
+        
+        this.tabLink = new Tab(this.stringsCount, this.zeroFretNotes);
     }
     
     drawScheme() {
@@ -154,14 +212,13 @@ class Neck {
                         $.findHarmonic($.getCurrentSelection('hrm-nt'), $.getCurrentSelection('hrm-tp'));
                         break;
                 }
-                //this.parentElement.previousElementSibling.children[1].innerHTML = this.innerHTML;
             })
     }
     
     
-    
     /*private*/
     setFrets(mountPlace, stringNumber) {
+        let $ = this;
         mountPlace.select('g.frets')
             .selectAll('rect.fret')
             .data(this.frets[stringNumber])
@@ -172,8 +229,9 @@ class Neck {
                 .attr('stroke', 'rgba(0,0,0,.9)')
                 .attr('id', (d,i) => 'fr-' + ( stringNumber * this.maxFret + i))
                 .on('click', function() {
-                    let targetLightSelector = '#lt-' + this.id.split('-')[1];
-                    d3.select(targetLightSelector).attr('fill', d3.select(targetLightSelector).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                    let targetLightId =  this.id.split('-')[1];
+                    d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                    $.tabLink.addNote( d3.select('#nt-' + targetLightId).text());
                 })
             .exit().remove();
     }
@@ -188,8 +246,9 @@ class Neck {
                 .attr('fill','rgba(0,0,0,.7)')
                 .attr('id', (d,i) => 'nt-' + (stringNumber * this.maxFret + i))
                 .on('click', function() {
-                    let targetLightId = this.id.split('-')[1];
-                    if( targetLightId > 18) d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                    let targetLightId =  this.id.split('-')[1];
+                    d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                    $.tabLink.addNote( d3.select('#nt-' + targetLightId).text());
                 })
             .exit().remove();
     }
@@ -304,8 +363,12 @@ class Neck {
     оптимизировать ручную подсветку ладов
     навести порядок в addMenuEventLis()
     добавить возможность изменять размер шрифта
+    добавить возможность локализировать выбор гаммы - нажатия на номера ладов
+    пентатоники
+    фикс стилей для меню выбора гамм
+    вывод нажатых ладов в псевдо-табы
+    инкапсулированный neck.init()
 --------------------*/
-
 
 //переменная для объекта класса neck - в нем всё
 var neck;
