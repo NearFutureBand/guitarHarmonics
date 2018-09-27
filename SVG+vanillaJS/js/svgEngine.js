@@ -6,7 +6,7 @@ class Neck {
         /*Полная октава*/
         this.noteSequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
         /*Последовательность нот для настройки гитары*/
-        this.defaultTuning = ["Z","E","B","G","D","A","E","B","G"];
+        this.defaultTuning = ["Z","E","B","G","D","A","E","B","G","D","A","E"];
         /*Матрица грифа для хранения данных для отрисовки*/
         this.frets = [];
         /*Правило минорной гаммы*/
@@ -15,13 +15,13 @@ class Neck {
         this.majorHarmRule = "ТТПТТТП";
         
         /*Открытые ноты при выбранном количестве струн*/
-        this.zeroFretNotes = this.defaultTuning.slice(0, this.stringsCount + 1);
+        this.zeroFretNotes = this.makeZeroFretNotes();
         /*Заполение массива frets*/
         this.setFretsData();
         
         /*Графические параметры*/
         this.widthHeightRate = 0.5;
-        this.fontSizeRate = 0.3;
+        this.fontSizeRate = 0.35;
         this.lightRadiusRate = 0.2;
         this.textPaddingBottomRate = 0.05;
         this.textAlignCoeff = 0.05;
@@ -30,12 +30,17 @@ class Neck {
     }
     
     drawScheme() {
-        d3.select('#neck').selectAll('g.string')
+        this.clearGroupsInStrings();
+        
+        let neck = d3.select('#neck')
+            .selectAll('g.string')
             .data(this.zeroFretNotes)
-            .enter().append("g")
+        
+        neck.enter().append("g")
                 .attr('class', 'string')
-                .attr('id', (d,i) => 'string-'+i)
-            .exit().remove();
+                .attr('id', (d,i) => 'string-' + i)
+        
+        neck.exit().remove();
         
         let stringGroup = null;
         
@@ -52,7 +57,6 @@ class Neck {
         }
         this.restyle();
     }
-    
     restyle() {
         
         let neckWidth = parseInt( getComputedStyle( document.getElementById('neck') ).width ),
@@ -91,6 +95,17 @@ class Neck {
         }
     }
     
+    changeStringCount(newStringCount) {
+        this.stringsCount = newStringCount;
+        this.zeroFretNotes = this.makeZeroFretNotes();
+        this.setFretsData();
+        this.drawScheme();
+    }
+    changeNeckLength(newMaxFret) {
+        this.maxFret = newMaxFret;
+        this.setFretsData();
+        this.drawScheme();
+    }
     /*Находит все ноты, входящие в заданную гамму*/
     findHarmonic(note, type) {
         let selection = [];
@@ -104,16 +119,6 @@ class Neck {
             }
         }
         this.lightUpNotes(selection);   
-    }
-    
-    /*Подсвечивает все ноты, которые находятся в массиве selection*/
-    lightUpNotes(selection) {
-        this.shutDownLights();
-        
-        selection.forEach( function(note) {
-            d3.selectAll('circle[data-note="' + note + '"]')
-                .attr('fill','yellow')
-        });
     }
     
     menuUtility() {
@@ -140,10 +145,10 @@ class Neck {
                 let currentMenuList = this.parentElement.parentElement.classList[this.parentElement.parentElement.classList.length - 1];
                 d3.select('.list.' + currentMenuList + ' .chosen').text(this.innerHTML)
                 switch(currentMenuList) {
-                    /*case 'neck-length':
-                        
+                    case 'neck-length':
+                        $.changeNeckLength($.getCurrentSelection('nk-ln'));
                     case 'string-count':
-                        */
+                        $.changeStringCount($.getCurrentSelection('str-cn'));
                     case 'harmonic-note':
                     case 'harmonic-type':
                         $.findHarmonic($.getCurrentSelection('hrm-nt'), $.getCurrentSelection('hrm-tp'));
@@ -167,8 +172,8 @@ class Neck {
                 .attr('stroke', 'rgba(0,0,0,.9)')
                 .attr('id', (d,i) => 'fr-' + ( stringNumber * this.maxFret + i))
                 .on('click', function() {
-                    let targetLightId = this.id.split('-')[1];
-                    if( targetLightId > 18) d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                    let targetLightSelector = '#lt-' + this.id.split('-')[1];
+                    d3.select(targetLightSelector).attr('fill', d3.select(targetLightSelector).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
                 })
             .exit().remove();
     }
@@ -200,6 +205,8 @@ class Neck {
             .exit().remove();
     }
     setFretsData() {
+        this.frets = [];
+        
         let i = 0, j = 0,
         oneString = [];
         this.frets.push([0]);
@@ -263,18 +270,40 @@ class Neck {
     }
     getCurrentSelection( from) {
         switch(from) {
+            case 'nk-ln':
+                return parseInt( d3.select('.list.neck-length .chosen').text());
+            case 'str-cn':
+                return parseInt( d3.select('.list.string-count .chosen').text());
             case 'hrm-tp':
                 return d3.select('.list.harmonic-type .chosen').text();
             case 'hrm-nt':
                 return d3.select('.list.harmonic-note .chosen').text();
         }
     }
+    /*Подсвечивает все ноты, которые находятся в массиве selection*/
+    lightUpNotes(selection) {
+        this.shutDownLights();
+        
+        selection.forEach( function(note) {
+            d3.selectAll('circle[data-note="' + note + '"]')
+                .attr('fill','yellow')
+        });
+    }
+    makeZeroFretNotes() {
+        return this.defaultTuning.slice(0, this.stringsCount + 1);
+    }
+    clearGroupsInStrings() {
+        for( let j = 0; j < this.stringsCount + 1; j++) {
+            d3.select('#string-' + j).selectAll('g').remove();
+        }
+    }
 }
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
-    события нажатия на пункты меню
     оптимизировать ручную подсветку ладов
+    навести порядок в addMenuEventLis()
+    добавить возможность изменять размер шрифта
 --------------------*/
 
 
