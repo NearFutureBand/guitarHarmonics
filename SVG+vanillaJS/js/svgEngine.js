@@ -111,8 +111,8 @@ class Neck {
         this.shutDownLights();
         
         selection.forEach( function(note) {
-            d3.selectAll('circle[data-note = ' + note + ']')
-                .attr('fill','rgba(255,255,0,.9)')
+            d3.selectAll('circle[data-note="' + note + '"]')
+                .attr('fill','yellow')
         });
     }
     
@@ -123,18 +123,36 @@ class Neck {
         this.addMenuEventListeners();
     }
     addMenuEventListeners() {
+        let $ = this;
         d3.selectAll('.menu-block')
             .on('mouseover', function() {
-                d3.selectAll('.' + this.classList[1] + ' .other').style('display','block');
+                Array.from(this.getElementsByClassName('other')).forEach(function(item) {
+                    item.style.display = 'block';
+                });
             })
             .on('mouseout', function() {
-                d3.selectAll('.' + this.classList[1] + ' .other').style('display','none');
+                Array.from(this.getElementsByClassName('other')).forEach(function(item) {
+                    item.style.display = 'none';
+                });
             })
         d3.selectAll('.other>div')
             .on('click', function() {
-                this.parentElement.previousElementSibling.children[1].innerHTML = this.innerHTML;
+                let currentMenuList = this.parentElement.parentElement.classList[this.parentElement.parentElement.classList.length - 1];
+                d3.select('.list.' + currentMenuList + ' .chosen').text(this.innerHTML)
+                switch(currentMenuList) {
+                    /*case 'neck-length':
+                        
+                    case 'string-count':
+                        */
+                    case 'harmonic-note':
+                    case 'harmonic-type':
+                        $.findHarmonic($.getCurrentSelection('hrm-nt'), $.getCurrentSelection('hrm-tp'));
+                        break;
+                }
+                //this.parentElement.previousElementSibling.children[1].innerHTML = this.innerHTML;
             })
     }
+    
     
     
     /*private*/
@@ -150,7 +168,7 @@ class Neck {
                 .attr('id', (d,i) => 'fr-' + ( stringNumber * this.maxFret + i))
                 .on('click', function() {
                     let targetLightId = this.id.split('-')[1];
-                    if( targetLightId > 18) d3.select('#li-' + targetLightId).attr('fill', d3.select('#li-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                    if( targetLightId > 18) d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
                 })
             .exit().remove();
     }
@@ -163,6 +181,11 @@ class Neck {
                 .attr('class', 'note')
                 .attr('font-family','arial')
                 .attr('fill','rgba(0,0,0,.7)')
+                .attr('id', (d,i) => 'nt-' + (stringNumber * this.maxFret + i))
+                .on('click', function() {
+                    let targetLightId = this.id.split('-')[1];
+                    if( targetLightId > 18) d3.select('#lt-' + targetLightId).attr('fill', d3.select('#lt-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                })
             .exit().remove();
     }
     setLights(mountPlace, stringNumber) {
@@ -173,7 +196,7 @@ class Neck {
                 .attr('class', 'light')
                 .attr('fill', 'transparent')
                 .attr('data-note', (d) => d)
-                .attr('id', (d,i) => 'li-' + (stringNumber * this.maxFret + i))
+                .attr('id', (d,i) => 'lt-' + (stringNumber * this.maxFret + i))
             .exit().remove();
     }
     setFretsData() {
@@ -209,7 +232,7 @@ class Neck {
             .attr('fill', 'transparent')
     }
     setMenuHarmonic() {
-        d3.select('.menu-block.harmonic .lists .list-1 .other')
+        d3.select('.menu-block .lists .list-1.harmonic-note .other')
             .selectAll('div')
             .data( ['-'].concat( this.noteSequence) )
             .enter().append('div')
@@ -221,7 +244,7 @@ class Neck {
         for( let i = 4; i <= 9; i++) {
             data.push(i);
         }
-        d3.select('.menu-block.string-count .list .other')
+        d3.select('.menu-block .list.string-count .other')
             .selectAll('div')
             .data(data)
             .enter().append('div')
@@ -232,17 +255,26 @@ class Neck {
         for( let i = 12; i <= 24; i++) {
             data.push(i);
         }
-        d3.select('.menu-block.neck-length .list .other')
+        d3.select('.menu-block .list.neck-length .other')
             .selectAll('div')
             .data(data)
             .enter().append('div')
                 .text( (d) => d)
+    }
+    getCurrentSelection( from) {
+        switch(from) {
+            case 'hrm-tp':
+                return d3.select('.list.harmonic-type .chosen').text();
+            case 'hrm-nt':
+                return d3.select('.list.harmonic-note .chosen').text();
+        }
     }
 }
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
     события нажатия на пункты меню
+    оптимизировать ручную подсветку ладов
 --------------------*/
 
 
