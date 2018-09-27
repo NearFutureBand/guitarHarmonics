@@ -121,12 +121,26 @@ class Neck {
         this.setMenuStringCount();
         this.setMenuNeckLength();
         this.addMenuEventListeners();
+        this.addFretsEventListeners();
     }
     addMenuEventListeners() {
-        d3.selectAll('.other>div')
-            .on('click', function(e) {
-                console.log(this);
+        d3.selectAll('.menu-block')
+            .on('mouseover', function() {
+                d3.selectAll('.' + this.classList[1] + ' .other').style('display','block');
             })
+            .on('mouseout', function() {
+                d3.selectAll('.' + this.classList[1] + ' .other').style('display','none');
+            })
+        d3.selectAll('.other>div')
+            .on('click', function() {
+                this.parentElement.previousElementSibling.children[1].innerHTML = this.innerHTML;
+            })
+    }
+    
+    addFretsEventListeners() {
+        d3.selectAll('rect.fret').on('click', function(){
+            
+        })
     }
     
     
@@ -140,6 +154,7 @@ class Neck {
                 .attr('fill', (d, i) => (stringNumber != 0 && i != 0)? 'transparent' : 'rgba(0,0,0,.04)')
                 .attr('stroke-width', 0.3)
                 .attr('stroke', 'rgba(0,0,0,.9)')
+                .attr('id', (d,i) => stringNumber * this.maxFret + i)
             .exit().remove();
     }
     setNotes(mountPlace, stringNumber) {
