@@ -121,7 +121,6 @@ class Neck {
         this.setMenuStringCount();
         this.setMenuNeckLength();
         this.addMenuEventListeners();
-        this.addFretsEventListeners();
     }
     addMenuEventListeners() {
         d3.selectAll('.menu-block')
@@ -137,12 +136,6 @@ class Neck {
             })
     }
     
-    addFretsEventListeners() {
-        d3.selectAll('rect.fret').on('click', function(){
-            
-        })
-    }
-    
     
     /*private*/
     setFrets(mountPlace, stringNumber) {
@@ -154,7 +147,11 @@ class Neck {
                 .attr('fill', (d, i) => (stringNumber != 0 && i != 0)? 'transparent' : 'rgba(0,0,0,.04)')
                 .attr('stroke-width', 0.3)
                 .attr('stroke', 'rgba(0,0,0,.9)')
-                .attr('id', (d,i) => stringNumber * this.maxFret + i)
+                .attr('id', (d,i) => 'fr-' + ( stringNumber * this.maxFret + i))
+                .on('click', function() {
+                    let targetLightId = this.id.split('-')[1];
+                    if( targetLightId > 18) d3.select('#li-' + targetLightId).attr('fill', d3.select('#li-' + targetLightId).attr('fill') == 'yellow' ? 'transparent' : 'yellow' )
+                })
             .exit().remove();
     }
     setNotes(mountPlace, stringNumber) {
@@ -176,6 +173,7 @@ class Neck {
                 .attr('class', 'light')
                 .attr('fill', 'transparent')
                 .attr('data-note', (d) => d)
+                .attr('id', (d,i) => 'li-' + (stringNumber * this.maxFret + i))
             .exit().remove();
     }
     setFretsData() {
