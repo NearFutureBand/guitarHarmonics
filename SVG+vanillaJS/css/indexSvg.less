@@ -45,26 +45,32 @@ input{
 
 nav{
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
     align-content: center;
     width: 100%;
     padding: 0;
     .menu-block{
-        padding: 1% 2%;
-        height: 100%;
+        margin-left: 2%;
+        margin-right: 2%;
+        width: 10vw;
         display: flex;
         flex-flow: column;
         align-items: center;
         justify-content: center;
-        width: auto;
+        padding: 0.5%;
+        .name{
+            padding: 1% 10%;
+        }
         .lists{
             display: flex;
-            //width: 100%;
+            width: 100%;
             justify-content: center;
             .list{
                 width: 100%;
                 position: relative;
+                display: flex;
+                justify-content: center;
                 margin-left: 5%;
                 margin-right: 5%;
                 .label{
@@ -72,22 +78,25 @@ nav{
                     flex-flow: nowrap;
                     align-items: center;
                     align-content: center;
-                    span:first-child{
+                    span{
                         margin-left: 5%;
                         margin-right: 5%;
                     }
                 }
                 .other{
+                    overflow-y: scroll;
+                    max-height: 90vh;
                     display: none;
                     width: 100%;
                     position: absolute;
                     top: 100%;
                     left: 0;
-                    
                     box-shadow: 2px 5px 5px rgba(0,0,0,.3);
                     div{
                         background-color: @lightGray;
                         width: 100%;
+                        padding-top: 5%;
+                        padding-bottom: 5%;
                         text-align: center;
                     }
                 }
@@ -95,7 +104,7 @@ nav{
             .list-1{
                 padding-left: 2%;
                 padding-right: 2%;
-                width: 30%;
+                width: 50%;
             }
             .list-2{
                 width: 70%;

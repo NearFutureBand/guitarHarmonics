@@ -1,20 +1,25 @@
 class Tab {
     constructor(stringCount, tuning) {
+        /*Array of all the notes in this tabs*/
         this.notes = [];
         this.stringCount = stringCount;
+        /*Tuning of the current guitar*/
         this.tuning = tuning;
         
+        /*Radius of the circle that shows note on the string*/
         this.noteRadius = 30;
+        /*Horizonal distance between two notes*/
         this.notePadding = 10;
         this.drawScheme();
-        
     }
     
+    /*Adds only once all the needed groups that will be never changed*/
     drawScheme() {
         d3.select('#tab').append('g').attr('class','tmp-string');
         d3.select('#tab').append('g').attr('class','text');
         this.redrawScheme();
     }
+    /*Works with the contents of groups that could be changed*/
     redrawScheme() {
         let texts = d3.select('g.text')
             .selectAll('text.tex')
@@ -24,7 +29,6 @@ class Tab {
             .attr('font-size', this.noteRadius / 2)
             .attr('class', 'tex')
         texts.exit().remove();
-        
         
         let notes = d3.select('g.tmp-string')
             .selectAll('circle.note')
@@ -37,6 +41,7 @@ class Tab {
         notes.exit().remove();
         this.restyle();
     }
+    /*Defines all the dynamic parameters that are constantly changing*/
     restyle() {
         d3.selectAll('g.tmp-string circle.note')
             .data(this.notes)
@@ -59,23 +64,23 @@ class Neck {
         this.minWidth = 800;
         this.maxFret = maxFret;
         this.stringsCount = stringsCount;
-        /*Полная октава*/
+        /*Full octave*/
         this.noteSequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-        /*Последовательность нот для настройки гитары*/
+        /*Flat notes of the standard guitar's tuning*/
         this.defaultTuning = ["Z","E","B","G","D","A","E","B","G","D","A","E"];
-        /*Матрица грифа для хранения данных для отрисовки*/
+        /*The Matrix with all data to draw, is using for d3.js*/
         this.frets = [];
-        /*Правило минорной гаммы*/
+        /*minor harmonic rule*/
         this.minorHarmRule = "ТПТТПТТ";
-        /*Правило мажорной гаммы*/
+        /*major harmonic rule*/
         this.majorHarmRule = "ТТПТТТП";
         
-        /*Открытые ноты при выбранном количестве струн*/
+        /*Flat note sequence for chosen count of strings*/
         this.zeroFretNotes = this.makeZeroFretNotes();
-        /*Заполение массива frets*/
+        /*Filling up the 'frets' array*/
         this.setFretsData();
         
-        /*Графические параметры*/
+        /*Graphic parameters*/
         this.widthHeightRate = 0.5;
         this.fontSizeRate = 0.35;
         this.lightRadiusRate = 0.2;
@@ -87,6 +92,11 @@ class Neck {
         this.tabLink = new Tab(this.stringsCount, this.zeroFretNotes);
     }
     
+    
+    init() {
+        this.drawScheme();
+        this.restyle();
+    }
     drawScheme() {
         this.clearGroupsInStrings();
         
@@ -113,7 +123,6 @@ class Neck {
             this.setNotes(stringGroup, j);
             if(j != 0) this.setLights(stringGroup, j);
         }
-        this.restyle();
     }
     restyle() {
         
@@ -153,31 +162,6 @@ class Neck {
         }
     }
     
-    changeStringCount(newStringCount) {
-        this.stringsCount = newStringCount;
-        this.zeroFretNotes = this.makeZeroFretNotes();
-        this.setFretsData();
-        this.drawScheme();
-    }
-    changeNeckLength(newMaxFret) {
-        this.maxFret = newMaxFret;
-        this.setFretsData();
-        this.drawScheme();
-    }
-    /*Находит все ноты, входящие в заданную гамму*/
-    findHarmonic(note, type) {
-        let selection = [];
-        if( note != '-') {
-            let currentNote = note,
-            rule = (type == 'Minor') ? this.minorHarmRule : this.majorHarmRule;
-        
-            for( let i = 0; i < rule.length; i++) {
-                currentNote = this.getNextNote(currentNote, rule[i]);  
-                selection.push(currentNote);
-            }
-        }
-        this.lightUpNotes(selection);   
-    }
     
     menuUtility() {
         this.setMenuHarmonic();
@@ -187,6 +171,8 @@ class Neck {
     }
     addMenuEventListeners() {
         let $ = this;
+        
+        /*Open hidden popup menu*/
         d3.selectAll('.menu-block')
             .on('mouseover', function() {
                 Array.from(this.getElementsByClassName('other')).forEach(function(item) {
@@ -198,6 +184,8 @@ class Neck {
                     item.style.display = 'none';
                 });
             })
+        
+        /*Initislize rebuild or lighting up of the neck*/
         d3.selectAll('.other>div')
             .on('click', function() {
                 let currentMenuList = this.parentElement.parentElement.classList[this.parentElement.parentElement.classList.length - 1];
@@ -354,19 +342,49 @@ class Neck {
         }
     }
     clickOnFret(id) {
-        d3.select('#lt-' + id).attr('fill', d3.select('#lt-' + id).attr('fill') == 'yellow' ? 'transparent' : 'yellow' );
-        this.tabLink.addNote( d3.select('#nt-' + id).text());
+        this.toggleFretLight(id);
+        this.tabLink.addNote(d3.select('#nt-' + id).text());
+    }
+    toggleFretLight(id) {
+        let light = d3.select('#lt-' + id);
+        light.attr('fill', light.attr('fill') == 'yellow' ? 'transparent' : 'yellow');
+    }
+    changeStringCount(newStringCount) {
+        this.stringsCount = newStringCount;
+        this.zeroFretNotes = this.makeZeroFretNotes();
+        this.setFretsData();
+        this.drawScheme();
+        this.restyle();
+    }
+    changeNeckLength(newMaxFret) {
+        this.maxFret = newMaxFret;
+        this.setFretsData();
+        this.drawScheme();
+        this.restyle();
+    }
+    /*Находит все ноты, входящие в заданную гамму*/
+    findHarmonic(note, type) {
+        let selection = [];
+        if( note != '-') {
+            let currentNote = note,
+            rule = (type == 'Minor') ? this.minorHarmRule : this.majorHarmRule;
+        
+            for( let i = 0; i < rule.length; i++) {
+                currentNote = this.getNextNote(currentNote, rule[i]);  
+                selection.push(currentNote);
+            }
+        }
+        this.lightUpNotes(selection);   
     }
 }
 
 /*TODO--------------
     инициализация меню со стартовыми параметрами
-    оптимизировать ручную подсветку ладов - функцию clickOnFret
+    подсветка ладов: даблклик - подсветка на грифе, просто клик - запись в табы и моргание зеленым
     навести порядок в addMenuEventLis()
     добавить возможность изменять размер шрифта
     добавить возможность локализировать выбор гаммы - нажатия на номера ладов
     пентатоники
-    изменить ширину выпадающих списков - вынести absolute блок на уровень где паддинга еще нет - создать доп контейнер сразу внтури .menu-block - одному присвоить паддинг и положить внутрь название, а в другой положить выпадуху
     вывод нажатых ладов в псевдо-табы - получение номера строки и лада
     инкапсулированный neck.init()
 --------------------*/
@@ -376,7 +394,7 @@ var neck;
 
 window.addEventListener('load', function() {
     neck = new Neck(19, 6);
-    neck.drawScheme();
+    neck.init();
 });
 window.addEventListener('resize', function() {
     neck.restyle();
