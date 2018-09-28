@@ -7,38 +7,51 @@ class Tab {
         this.tuning = tuning;
         
         /*Radius of the circle that shows note on the string*/
-        this.noteRadius = 30;
+        this.noteRadius = 20;
         /*Horizonal distance between two notes*/
-        this.notePadding = 10;
+        this.notePadding = 8;
         this.drawScheme();
+        
+        this.activateResponsiveBehaviour();
     }
     
     /*Adds only once all the needed groups that will be never changed*/
     drawScheme() {
-        d3.select('#tab').append('g').attr('class','tmp-string');
-        d3.select('#tab').append('g').attr('class','text');
+        d3.select('#tab').append('g').attr('class','g-tab-strings');
+        d3.select('#tab').append('g').attr('class','g-tab-notes');
+        d3.select('#tab').append('g').attr('class','g-tab-text');
         this.redrawScheme();
     }
     /*Works with the contents of groups that could be changed*/
     redrawScheme() {
-        let texts = d3.select('g.text')
+        let texts = d3.select('g.g-tab-text')
             .selectAll('text.tex')
             .data(this.notes);
         texts.enter().append('text')
             .text(d => d.note)
-            .attr('font-size', this.noteRadius / 2)
-            .attr('class', 'tex')
+            .attr('font-size', this.noteRadius / 1.5)
+            .attr('class', 'tex');
         texts.exit().remove();
         
-        let notes = d3.select('g.tmp-string')
+        let notes = d3.select('g.g-tab-notes')
             .selectAll('circle.note')
             .data(this.notes);
         notes.enter().append('circle')
             .attr('r', this.noteRadius)
             .attr('class','note')
             .attr('data-tab-note', d => d.note)
-            .attr('fill', 'yellow')
+            .attr('fill', 'yellow');
         notes.exit().remove();
+        
+        let strings = d3.select('g.g-tab-strings')
+            .selectAll('line.string')
+            .data(new Array(this.stringCount));
+        strings.enter().append('line')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1)
+            .attr('class', 'string');
+        strings.exit().remove();
+        
         this.restyle();
     }
     /*Defines all the dynamic parameters that are constantly changing*/
@@ -48,20 +61,36 @@ class Tab {
         d3.select('#tab')
             .attr('height', dist * this.stringCount)
         
-        d3.selectAll('g.tmp-string circle.note')
+        d3.selectAll('g.g-tab-notes circle.note')
             .data(this.notes)
             .attr('cx', (d, i) => (i + 1 ) * dist)
             .attr('cy', (d, i) => dist * (d.string - 0.5))
-        d3.selectAll('g.text text.tex')
+        d3.selectAll('g.g-tab-text text.tex')
             .data(this.notes)
             .attr('x', (d, i) => (i + 1 ) * dist)
             .attr('y', (d, i) => dist * (d.string - 0.5))
+        d3.selectAll('g.g-tab-strings line.string')
+            .data(new Array(this.stringCount))
+            .attr('x1', this.notePadding )
+            .attr('y1', (d, i) => dist * (i + 0.5))
+            .attr('x2', parseInt( d3.select('#tab').style('width')) - this.notePadding)
+            .attr('y2', (d, i) => dist * (i + 0.5))
     }
     
     addNote(note) {
         this.notes.push(note);
         this.redrawScheme();
     }
+    activateResponsiveBehaviour() {
+        let $ = this;
+        window.addEventListener('resize', function() {
+            $.restyle();
+        });
+    }
+    
+    /*TODO 
+    функция изменения ширины холста - когда нот больше чем ширина экрана
+    */
 }
 
 class Neck {
@@ -87,8 +116,9 @@ class Neck {
         
         /*Graphic parameters*/
         this.widthHeightRate = 0.5;
-        this.fontSizeRate = 0.35;
         this.lightRadiusRate = 0.2;
+        this.lightTranslYCoeff = 0.1;
+        this.fontSizeRate = 0.35;
         this.textPaddingBottomRate = 0.05;
         this.textAlignCoeff = 0.05;
         
@@ -101,6 +131,7 @@ class Neck {
     init() {
         this.drawScheme();
         this.restyle();
+        this.activateResponsiveBehaviour();
     }
     drawScheme() {
         this.clearGroupsInStrings();
@@ -137,6 +168,7 @@ class Neck {
         fretHeight = fretWidth * this.widthHeightRate,
         fontSize = fretHeight * this.fontSizeRate,
         lightRadius = fretWidth * this.lightRadiusRate,
+        lightTranslY = fretHeight * this.lightTranslYCoeff,
         textPaddingBottom = fretHeight * this.textPaddingBottomRate,
         textAlignCoeff = fretWidth * this.textAlignCoeff,
         stringGroup = null;
@@ -162,7 +194,7 @@ class Neck {
             stringGroup.select('g.lights').selectAll('circle.light')
                 .data(this.frets[j])
                     .attr('cx', (d, i) => i * fretWidth + fretWidth / 2)
-                    .attr('cy', (j + 1) * fretHeight )
+                    .attr('cy', (j + 1) * fretHeight - lightTranslY)
                     .attr('r', () => lightRadius);
         }
     }
@@ -207,7 +239,12 @@ class Neck {
                 }
             })
     }
-    
+    activateResponsiveBehaviour() {
+        let $ = this;
+        window.addEventListener('resize', function() {
+            $.restyle();
+        });
+    }
     
     /*private*/
     setFrets(mountPlace, stringNumber) {
@@ -224,9 +261,9 @@ class Neck {
                 .on('click', function() {
                     $.clickOnFret(this.id.split('-')[1]);
                 })
-                .on('dblclick', function() {
+                /*.on('dblclick', function() {
                     $.dblClickOnFret(this.id.split('-')[1]);
-                })
+                })*/
                 
             .exit().remove();
     }
@@ -241,9 +278,12 @@ class Neck {
                 .attr('font-family','arial')
                 .attr('fill','rgba(0,0,0,.7)')
                 .attr('id', (d,i) => 'nt-' + (stringNumber * this.maxFret + i))
-                .on('dblclick', function() {
-                    $.dblClickOnFret(this.id.split('-')[1]);
+                .on('click', function() {
+                    $.clickOnFret(this.id.split('-')[1]);
                 })
+                /*.on('dblclick', function() {
+                    $.dblClickOnFret(this.id.split('-')[1]);
+                })*/
             .exit().remove();
     }
     setLights(mountPlace, stringNumber) {
@@ -256,9 +296,12 @@ class Neck {
                 .attr('fill', 'transparent')
                 .attr('data-note', (d) => d)
                 .attr('id', (d,i) => 'lt-' + (stringNumber * this.maxFret + i))
-                .on('dblclick', function() {
-                    $.dblClickOnFret(this.id.split('-')[1]);
+                .on('click', function() {
+                    $.clickOnFret(this.id.split('-')[1]);
                 })
+                /*.on('dblclick', function() {
+                    $.dblClickOnFret(this.id.split('-')[1]);
+                })*/
             .exit().remove();
     }
     
@@ -366,19 +409,14 @@ class Neck {
     }
     dblClickOnFret(id) {
         this.toggleFretLight(id);
-        //команда добавления ноты в табы:
-        
     }
     //проверить не подсвечена ли эта нота - тогда сделать переход в желтый
     clickOnFret(id) {
+        let finalColor = d3.select('#lt-' + id).attr('fill') == 'yellow'? 'yellow' : 'transparent'; 
         d3.select('#lt-' + id).attr('fill', '#15d424');
         d3.select('#lt-' + id).transition()
             .duration(500)
-            .attr("fill", "transparent");
-        console.log( { string: Math.floor(id / this.maxFret), 
-                               fret: id % this.maxFret,
-                               note: d3.select('#nt-' + id).text() 
-                              }  );
+            .attr("fill", finalColor);
         this.tabLink.addNote( { string: Math.floor(id / this.maxFret), 
                                fret: id % this.maxFret,
                                note: d3.select('#nt-' + id).text() 
@@ -433,8 +471,5 @@ var neck;
 window.addEventListener('load', function() {
     neck = new Neck(19, 6);
     neck.init();
-});
-window.addEventListener('resize', function() {
-    neck.restyle();
 });
 
