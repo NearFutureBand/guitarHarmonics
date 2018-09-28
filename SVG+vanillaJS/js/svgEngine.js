@@ -25,7 +25,7 @@ class Tab {
             .selectAll('text.tex')
             .data(this.notes);
         texts.enter().append('text')
-            .text(d => d)
+            .text(d => d.note)
             .attr('font-size', this.noteRadius / 2)
             .attr('class', 'tex')
         texts.exit().remove();
@@ -36,21 +36,26 @@ class Tab {
         notes.enter().append('circle')
             .attr('r', this.noteRadius)
             .attr('class','note')
-            .attr('data-tab-note', d => d)
+            .attr('data-tab-note', d => d.note)
             .attr('fill', 'yellow')
         notes.exit().remove();
         this.restyle();
     }
     /*Defines all the dynamic parameters that are constantly changing*/
     restyle() {
+        let dist = 2 * this.noteRadius + this.notePadding;
+        
+        d3.select('#tab')
+            .attr('height', dist * this.stringCount)
+        
         d3.selectAll('g.tmp-string circle.note')
             .data(this.notes)
-            .attr('cx', (d, i) => (i + 1 )* ( 2 * this.noteRadius + this.notePadding ))
-            .attr('cy', "50%")
+            .attr('cx', (d, i) => (i + 1 ) * dist)
+            .attr('cy', (d, i) => dist * (d.string - 0.5))
         d3.selectAll('g.text text.tex')
             .data(this.notes)
-            .attr('x', (d,i) => (i + 1 )* ( 2 * this.noteRadius + this.notePadding ))
-            .attr('y', "50%")
+            .attr('x', (d, i) => (i + 1 ) * dist)
+            .attr('y', (d, i) => dist * (d.string - 0.5))
     }
     
     addNote(note) {
@@ -219,6 +224,10 @@ class Neck {
                 .on('click', function() {
                     $.clickOnFret(this.id.split('-')[1]);
                 })
+                .on('dblclick', function() {
+                    $.dblClickOnFret(this.id.split('-')[1]);
+                })
+                
             .exit().remove();
     }
     setNotes(mountPlace, stringNumber) {
@@ -232,12 +241,13 @@ class Neck {
                 .attr('font-family','arial')
                 .attr('fill','rgba(0,0,0,.7)')
                 .attr('id', (d,i) => 'nt-' + (stringNumber * this.maxFret + i))
-                .on('click', function() {
-                    $.clickOnFret(this.id.split('-')[1]);
+                .on('dblclick', function() {
+                    $.dblClickOnFret(this.id.split('-')[1]);
                 })
             .exit().remove();
     }
     setLights(mountPlace, stringNumber) {
+        let $ = this;
         mountPlace.select('g.lights')
             .selectAll('circ.light')
             .data(this.frets[stringNumber])
@@ -246,8 +256,12 @@ class Neck {
                 .attr('fill', 'transparent')
                 .attr('data-note', (d) => d)
                 .attr('id', (d,i) => 'lt-' + (stringNumber * this.maxFret + i))
+                .on('dblclick', function() {
+                    $.dblClickOnFret(this.id.split('-')[1]);
+                })
             .exit().remove();
     }
+    
     setFretsData() {
         this.frets = [];
         
@@ -265,6 +279,10 @@ class Neck {
             this.frets.push( oneString);
         }
     }
+    makeZeroFretNotes() {
+        return this.defaultTuning.slice(0, this.stringsCount + 1);
+    }
+    
     checkIndex(index) {
         while( !(index < 12) ) index -=12;
         return index;
@@ -278,10 +296,16 @@ class Neck {
         }
         return this.noteSequence[ this.checkIndex(index)];
     }
+    
     shutDownLights() {
         d3.selectAll('circle.light')
             .attr('fill', 'transparent')
     }
+    toggleFretLight(id) {
+        let light = d3.select('#lt-' + id);
+        light.attr('fill', light.attr('fill') == 'yellow' ? 'transparent' : 'yellow');
+    }
+    
     setMenuHarmonic() {
         d3.select('.menu-block .lists .list-1.harmonic-note .other')
             .selectAll('div')
@@ -312,6 +336,7 @@ class Neck {
             .enter().append('div')
                 .text( (d) => d)
     }
+    
     getCurrentSelection( from) {
         switch(from) {
             case 'nk-ln':
@@ -333,22 +358,33 @@ class Neck {
                 .attr('fill','yellow')
         });
     }
-    makeZeroFretNotes() {
-        return this.defaultTuning.slice(0, this.stringsCount + 1);
-    }
+    
     clearGroupsInStrings() {
         for( let j = 0; j < this.stringsCount + 1; j++) {
             d3.select('#string-' + j).selectAll('g').remove();
         }
     }
-    clickOnFret(id) {
+    dblClickOnFret(id) {
         this.toggleFretLight(id);
-        this.tabLink.addNote(d3.select('#nt-' + id).text());
+        //команда добавления ноты в табы:
+        
     }
-    toggleFretLight(id) {
-        let light = d3.select('#lt-' + id);
-        light.attr('fill', light.attr('fill') == 'yellow' ? 'transparent' : 'yellow');
+    //проверить не подсвечена ли эта нота - тогда сделать переход в желтый
+    clickOnFret(id) {
+        d3.select('#lt-' + id).attr('fill', '#15d424');
+        d3.select('#lt-' + id).transition()
+            .duration(500)
+            .attr("fill", "transparent");
+        console.log( { string: Math.floor(id / this.maxFret), 
+                               fret: id % this.maxFret,
+                               note: d3.select('#nt-' + id).text() 
+                              }  );
+        this.tabLink.addNote( { string: Math.floor(id / this.maxFret), 
+                               fret: id % this.maxFret,
+                               note: d3.select('#nt-' + id).text() 
+                              });
     }
+    
     changeStringCount(newStringCount) {
         this.stringsCount = newStringCount;
         this.zeroFretNotes = this.makeZeroFretNotes();
@@ -386,7 +422,9 @@ class Neck {
     добавить возможность локализировать выбор гаммы - нажатия на номера ладов
     пентатоники
     вывод нажатых ладов в псевдо-табы - получение номера строки и лада
-    инкапсулированный neck.init()
+    удаление из табов
+    сделать лого белым и в навигации применить фильтр
+    transitions
 --------------------*/
 
 //переменная для объекта класса neck - в нем всё
