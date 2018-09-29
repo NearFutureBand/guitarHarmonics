@@ -1,9 +1,9 @@
 ### Guitar Harmonics Application
 This app helps young guitarists learn harmonics!
 
-###About
+### About
 
-##Technical information
+## Technical information
 
 This repository has some versions of same application.
 * The first version created with using only vanilla js, the graphic part is made with html blocks and flexbox approach in styling
