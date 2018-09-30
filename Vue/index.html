@@ -1,0 +1,66 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="shortcut icon" href="logo.png" type="image/png">
+    <title>Guitar Harmonics App - Virtual Destructor</title> 
+</head> 
+    <body>
+       <div class="wrapper" id="app">
+          <nav>
+            <form id="fret-count-selection">
+               <div class="name">NECK LENGTH</div>
+               <div class="form">
+                    <select id="count-of-frets">
+                    
+                    </select>
+                </div>
+            </form>
+            <!--<form id="zero-notes-selection">
+               <div class="name">TUNING</div>
+                <div class="form">
+                   <select id="zero-notes">
+                        <option>EBGDAEB</option>
+                        <option>EBGDAEA</option>
+                    </select>
+                </div>
+            </form>-->
+            <form id="string-count-selection">
+               <div class="name">STRINGS</div>
+               <div class="form">
+                    <select id="string-count">
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                    </select>
+                </div>
+            </form>
+            <form id="harmonic-selection">
+               <div class="name">HARMONIC</div>
+               <div class="form">
+                    <select id="harmonic-note">
+                   
+                   </select>
+                   <select id="harmonic-type">
+                       <option>Minor</option>
+                       <option>Major</option>
+                   </select>
+               </div>
+            </form>
+            
+            <a class="app-logo" href="#" alt="Virtual Destructor"><img src="logo.png" alt="Virtual Destructor"></a>        
+        </nav>
+            
+        <div class="neck" id="neck">
+            
+        </div>
+           
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="js/index.js"></script>
+</body> 
+</html>
