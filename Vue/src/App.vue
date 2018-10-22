@@ -4,9 +4,10 @@
         <HelloWorld msg="Welcome to Your Vue.js App" />-->
         <svg id="neck-container">
             <g class="string" v-for="(string, i) in tuning" :id="'string-' + i">
-                <g class="fret" v-for="(f,j) in frets[i]" :id="`f-${i}-${j}`">
+                <Fret :stringsCount="stringsCount" :fretsCount="fretsCount" :position="[i,0]" :note="frets[i][0]"/>
+                <!--<g class="fret" v-for="(f,j) in frets[i]" :id="`f-${i}-${j}`">
                     <text :text="f"></text>
-                </g>
+                </g>-->
             </g>
         </svg>
     </div>
@@ -14,11 +15,12 @@
 
 <script>
     import HelloWorld from './components/HelloWorld.vue'
+    import Fret from './components/Fret.vue'
 
     export default {
         name: 'app',
         components: {
-            HelloWorld
+            Fret
         },
         data: () => {
             return {
@@ -35,7 +37,7 @@
             tuning() {
                 return this.defaultTuning.slice(0, this.stringsCount + 1);
             },
-
+            
             frets() {
                 let frets = [];
                 let i = 0,
@@ -83,5 +85,14 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #333;
+        width: 100%;
+        height: 100%;
+        padding: 1vh;
+        box-sizing: border-box;
+    }
+    #neck-container {
+        background-color: #eee;
+        width: 100%;
+        height: 100%;
     }
 </style>
