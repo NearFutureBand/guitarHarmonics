@@ -2,21 +2,11 @@
     <div id="app">
         <!--<img alt="Vue logo" src="./assets/logo.png">
         <HelloWorld msg="Welcome to Your Vue.js App" />-->
-        <svg id="neck-container" :width="w" :height="h">
-            <g class="string" v-for="(string, i) in tuning" :id="'string-' + i">
-                <Fret 
-                    :stringsCount="stringsCount"
-                    :fretsCount="fretsCount"
-                    :position="[i,0]"
-                    :note="frets[i][0]"
-                    :screenWidth="screenWidth"
-                    :neckWidth="neckWidth"
-                />
-                <!--<g class="fret" v-for="(f,j) in frets[i]" :id="`f-${i}-${j}`">
-                    <text :text="f"></text>
-                </g>-->
-            </g>
-        </svg>
+        <div id="neck-container">
+            <div class="string" v-for="(string, i) in tuning" :id="'string-' + i">
+                <Fret v-for="(f, j) in frets[i]" :stringsCount="stringsCount" :fretsCount="fretsCount" :position="[j,i]" :note="f" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -26,6 +16,9 @@
 
     export default {
         name: 'app',
+        mounted: function() {
+
+        },
         components: {
             Fret
         },
@@ -41,28 +34,25 @@
 
 
                 /*Graphic parameters*/
-                padding: window.innerWidth * 0.02,
-                widthHeightRate: 0.5,
-                lightRadiusRate: 0.2,
-                lightTranslYCoeff: 0.1,
-                fontSizeRate: 0.3,
-                textPaddingBottomRate: 0.0,
-                textAlignCoeff: 0.0
+                neckWidth: 0,
+                neckHeight: 0,
+                padding: window.innerWidth * 0.01,
+
             }
         },
         computed: {
-            tuning() {
+            tuning: function() {
                 return this.defaultTuning.slice(0, this.stringsCount + 1);
             },
 
-            frets() {
+            frets: function() {
                 let frets = [];
                 let i = 0,
                     j = 0,
                     oneString = [];
 
                 for (i = 0; i <= this.fretsCount; i++) {
-                    oneString.push(i);
+                    oneString.push(i.toString());
                 }
                 frets.push(oneString);
 
@@ -75,15 +65,9 @@
                     }
                     frets.push(oneString);
                 }
+                console.log(frets[1]);
                 return frets;
             },
-
-            neckWidth() {
-                return parseInt(getComputedStyle(document.getElementById('neck-container')).width);
-            },
-            screenWidth() {
-                return (this.neckWidth > this.minWidth) ? this.neckWidth : this.minWidth;
-            }
         },
         methods: {
             checkIndex: function(index) {
@@ -111,13 +95,17 @@
         color: #333;
         width: 100%;
         height: 100%;
-        padding: 2vw;
+        padding: 1vw;
         box-sizing: border-box;
     }
 
     #neck-container {
         background-color: #eee;
         width: 100%;
-        height: 100%;
+    }
+
+    .string {
+        display: flex;
+        flex-flow: row;
     }
 </style>
