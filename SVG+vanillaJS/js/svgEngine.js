@@ -163,7 +163,7 @@ class Neck {
     restyle() {
         
         let neckWidth = parseInt( getComputedStyle( document.getElementById('neck') ).width ),
-        screenWidth = ( neckWidth > this.minWidth ) ? neckWidth : this.minWidth,
+        
         fretWidth = screenWidth / ( this.maxFret + 1 ),
         fretHeight = fretWidth * this.widthHeightRate,
         fontSize = fretHeight * this.fontSizeRate,
