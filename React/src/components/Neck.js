@@ -6,17 +6,15 @@ import GuitarString from '../components/GuitarString';
 import '../css/Neck.less';
 
 class Neck extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
 
   }
 
   render() {
     const { strings } = this.props;
-   
-
-
+    
     return (
       <div className="neck">
         {

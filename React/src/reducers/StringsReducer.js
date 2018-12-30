@@ -1,11 +1,11 @@
-//import { FETCH_NOTES } from '../actions';
+import { CHANGE_STRING_COUNT } from '../actions';
 
 
 export default function(strings = 6, action) {
 
-    /*if( action.type === FETCH_NOTES) {
-        return NotesDatabase;
-    }*/
+    if( action.type === CHANGE_STRING_COUNT) {
+        return action.payload;
+    }
   
     return strings;
 }
