@@ -1,0 +1,51 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+html{
+    width: 100vw;
+    height: 100vh;
+}
+body, #root{
+    width: 100%;
+    height: 100%;
+    background-color: @back-color;
+}
+
+a, a:hover, a:visited, a:focus{
+    color: inherit;
+    text-decoration: none;
+}
+
+input, textarea, input:focus, textarea:focus {
+    outline: none;
+}
+
+@text-color: rgb(31, 29, 29);
+@back-color: rgb(238, 126, 62);
+@page-width: 70%;
+
+*{
+    color: @text-color;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+div{
+    display: flex;
+}
+
+/* ---- App styles ---- */
+
+.app{
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+    .page{
+        width: @page-width;
+        background-color: rgb(255, 255, 255);
+        justify-content: center;
+        align-content: center;
+    }
+}
