@@ -8,7 +8,6 @@ import TuningReducer from './TuningReducer';
 export default combineReducers({
     strings: StringsReducer,
     frets: FretsReducer,
-    tuning: TuningReducer,
-    sequence: ['C','C#','E']
+    tuning: TuningReducer
 });
 

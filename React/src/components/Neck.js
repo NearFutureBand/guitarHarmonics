@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import GuitarString from '../components/GuitarString';
 
+
 import '../css/Neck.less';
 
 class Neck extends Component {
@@ -13,6 +14,8 @@ class Neck extends Component {
 
   render() {
     const { strings } = this.props;
+   
+
 
     return (
       <div className="neck">
