@@ -1,0 +1,26 @@
+@import './parameters.less';
+
+.header-wrapper{
+    width: 100%;
+    padding-bottom: @padding;
+    .header{
+        background-color: @back-color;
+        //height: 15vh;
+        padding: @padding;
+
+        .nav-block{
+            flex-flow: column;
+        }
+
+    }
+    input{
+        background-color: transparent;
+        border: none;
+        font-weight: 700;
+        width: 90%;
+        padding: 0 @padding;
+    }
+    input:hover {
+        background-color: rgba(0,0,0,.2);
+    }
+}

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Neck from './Neck';
+import Header from './Header';
 
 import '../css/App.less';
 
@@ -11,6 +12,7 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <Header />
         <Neck />
       </div>
     );
