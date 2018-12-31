@@ -6,6 +6,19 @@
     border-left: 1px solid gray;
     justify-content: center;
     align-items: flex-end;
+    position: relative;
+    .note{
+        z-index: 2;
+    }
+    .light{
+        width: @padding*3;
+        height: @padding*3;
+        border-radius: @padding*1.5;
+        z-index: 1;
+        top: @padding*3;
+        position: absolute;
+        background-color: yellow;
+    }
 }
 .fret:hover{
     background-color: @back-color + #333;

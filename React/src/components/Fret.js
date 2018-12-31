@@ -22,7 +22,7 @@ class Fret extends Component {
             (pos[0] !== 0 )? this.note : pos[1]
           }
         </span>
-        
+        <div className="light"></div>
       </div>
     );
   }

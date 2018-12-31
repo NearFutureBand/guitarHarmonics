@@ -4,7 +4,6 @@ export const CHANGE_TUNING = 'CHANGE_TUNING';
 
 
 export function changeFretCount(frets) {
-    
     return {
         type: CHANGE_FRET_COUNT,
         payload: frets

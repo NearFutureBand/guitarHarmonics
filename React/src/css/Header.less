@@ -7,9 +7,24 @@
         background-color: @back-color;
         //height: 15vh;
         padding: @padding;
-
+        justify-content: space-around;
         .nav-block{
+            align-items: center;
             flex-flow: column;
+            .title{
+
+            }
+            >div{
+                flex-wrap: wrap;
+                >span{
+                    padding: 0 @padding/3;
+                    font-size: 2rem;
+                }
+                >span:hover{
+                    cursor: pointer;
+                    background-color: @back-color + #333;
+                }
+            }
         }
 
     }

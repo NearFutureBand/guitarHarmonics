@@ -1,11 +1,11 @@
-//import { FETCH_NOTES } from '../actions';
+import { CHANGE_FRET_COUNT } from '../actions';
 
 
-export default function(frets = 24, action) {
+export default function(frets = 12, action) {
 
-    /*if( action.type === FETCH_NOTES) {
-        return NotesDatabase;
-    }*/
+    if( action.type === CHANGE_FRET_COUNT) {
+        return action.payload;
+    }
 
     return frets;
 }

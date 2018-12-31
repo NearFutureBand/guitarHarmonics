@@ -7,39 +7,56 @@ import '../css/Header.less';
 class Header extends Component {
   constructor(props) {
     super(props);
-  }
 
-  handleChangeFretCount = (event) => {   
-    this.props.changeFretCount(event.target.value);
-  }
-
-  handleChangeStringCount = (event) => {
-    this.props.changeStringCount(event.target.value);
-  }
-
-  handleChangeTuning = (event) => {
-    this.props.changeTuning(event.target.value);
+    this.stringsRange = [4,5,6,7,8,9];
+    this.fretsRange = [12,13,14,15,16,17,18,19,20,21,22,23,24];
+    this.tuningsRange = ['Standard', 'Drop D', 'Drop C', 'Drop A'];
   }
 
 
 
   render() {
-    let { strings, frets, tuning } = this.props;
+    const { 
+      strings,
+      frets,
+      tuning,
+      changeStringCount,
+      changeFretCount,
+      changeTuning
+    } = this.props;
 
     return (
       <header className="header-wrapper">
         <div className="header">
           <div className="nav-block">
             <span className="title">strings</span>
-            <input type="text" defaultValue={strings} onChange={this.handleChangeStringCount}/>
+            <div>
+              {
+                this.stringsRange.map( (el) => {
+                  return <span key={el} onClick={ () => changeStringCount(el) }>{el}</span> 
+                })
+              }
+            </div>
           </div>
           <div className="nav-block">
             <span className="title">frets</span>
-            <input type="text" defaultValue={frets} onChange={this.handleChangeFretCount}/>
+            <div>
+              {
+                this.fretsRange.map( (el) => {
+                  return <span key={el} onClick={ () => changeFretCount(el) }>{el}</span> 
+                })
+              }
+            </div>
           </div>
           <div className="nav-block">
             <span className="title">tuning</span>
-            <input type="text" defaultValue={tuning.name} onChange={this.handleTuning}/>
+            <div>
+              {
+                this.tuningsRange.map( (el) => {
+                  return <span key={el} onClick={ () => changeTuning(el) }>{el}</span> 
+                })
+              }
+            </div>
           </div>
         </div>
       </header>
