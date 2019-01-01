@@ -18,18 +18,20 @@ class Fret extends Component {
   }
   
   render() {
-    const { pos, tuning } = this.props;
+    const { pos, tuning, harmonic } = this.props;
     const note = getNote(pos, tuning);
+    const isNumber = pos[0] === 0;
+
 
     return (
       <div className="fret" id={`fret-${pos[0]}-${pos[1]}`} onClick={this.toggleLight}>
         <span className="note">
           {
-            (pos[0] !== 0 )? note : pos[1]
+            !isNumber? note : pos[1]
           }
         </span>
         {
-          this.state.active && <div className="light"></div>
+          !isNumber && (this.state.active || note in harmonic) && <div className="light"></div>
         }
       </div>
     );
@@ -38,7 +40,10 @@ class Fret extends Component {
 
 
 function mapStateToProps( state ) {
-    return { tuning: state.tuning };
+    return { 
+      tuning: state.tuning,
+      harmonic: state.harmonic
+    };
 }
   
 export default connect(mapStateToProps)(Fret);
