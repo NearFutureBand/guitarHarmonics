@@ -7,6 +7,8 @@ import '../css/GuitarString.less';
 class GuitarString extends Component {
   constructor(props) {
     super(props);
+
+    this.stringWidth = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
   }
 
   render() {
@@ -14,7 +16,11 @@ class GuitarString extends Component {
     
 
     return (
-      <div className="string" id={`string-${number}`}>
+      <div
+        className="string"
+        id={`string-${number}`}
+        style={{ borderBottom: `${ this.stringWidth[number-1] }px solid gray` }}
+      >
         {
           new Array(frets + 1).fill(0).map( (el, i) => {
             return <Fret key={i} pos={[number, i]}/>
@@ -26,7 +32,10 @@ class GuitarString extends Component {
 }
 
 function mapStateToProps( state ) {
-  return { frets: state.frets };
+  return {
+    frets: state.frets,
+    strings: state.strings
+  };
 }
 
 export default connect(mapStateToProps)(GuitarString);
