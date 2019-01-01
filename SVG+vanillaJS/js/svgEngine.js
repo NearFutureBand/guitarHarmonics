@@ -1,3 +1,98 @@
+class Tab {
+    constructor(stringCount, tuning) {
+        /*Array of all the notes in this tabs*/
+        this.notes = [];
+        this.stringCount = stringCount;
+        /*Tuning of the current guitar*/
+        this.tuning = tuning;
+        
+        /*Radius of the circle that shows note on the string*/
+        this.noteRadius = 20;
+        /*Horizonal distance between two notes*/
+        this.notePadding = 8;
+        this.drawScheme();
+        
+        this.activateResponsiveBehaviour();
+    }
+    
+    /*Adds only once all the needed groups that will be never changed*/
+    drawScheme() {
+        d3.select('#tab').append('g').attr('class','g-tab-strings');
+        d3.select('#tab').append('g').attr('class','g-tab-notes');
+        d3.select('#tab').append('g').attr('class','g-tab-text');
+        this.redrawScheme();
+    }
+    /*Works with the contents of groups that could be changed*/
+    redrawScheme() {
+        let texts = d3.select('g.g-tab-text')
+            .selectAll('text.tex')
+            .data(this.notes);
+        texts.enter().append('text')
+            .text(d => d.note)
+            .attr('font-size', this.noteRadius / 1.5)
+            .attr('class', 'tex');
+        texts.exit().remove();
+        
+        let notes = d3.select('g.g-tab-notes')
+            .selectAll('circle.note')
+            .data(this.notes);
+        notes.enter().append('circle')
+            .attr('r', this.noteRadius)
+            .attr('class','note')
+            .attr('data-tab-note', d => d.note)
+            .attr('fill', 'yellow');
+        notes.exit().remove();
+        
+        let strings = d3.select('g.g-tab-strings')
+            .selectAll('line.string')
+            .data(new Array(this.stringCount));
+        strings.enter().append('line')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1)
+            .attr('class', 'string');
+        strings.exit().remove();
+        
+        this.restyle();
+    }
+    /*Defines all the dynamic parameters that are constantly changing*/
+    restyle() {
+        let dist = 2 * this.noteRadius + this.notePadding;
+        
+        d3.select('#tab')
+            .attr('height', dist * this.stringCount)
+        
+        d3.selectAll('g.g-tab-notes circle.note')
+            .data(this.notes)
+            .attr('cx', (d, i) => (i + 1 ) * dist)
+            .attr('cy', (d, i) => dist * (d.string - 0.5))
+        d3.selectAll('g.g-tab-text text.tex')
+            .data(this.notes)
+            .attr('x', (d, i) => (i + 1 ) * dist)
+            .attr('y', (d, i) => dist * (d.string - 0.5))
+        d3.selectAll('g.g-tab-strings line.string')
+            .data(new Array(this.stringCount))
+            .attr('x1', this.notePadding )
+            .attr('y1', (d, i) => dist * (i + 0.5))
+            .attr('x2', parseInt( d3.select('#tab').style('width')) - this.notePadding)
+            .attr('y2', (d, i) => dist * (i + 0.5))
+    }
+    
+    addNote(note) {
+        this.notes.push(note);
+        this.redrawScheme();
+    }
+    activateResponsiveBehaviour() {
+        let $ = this;
+        window.addEventListener('resize', function() {
+            $.restyle();
+        });
+    }
+    
+    /*TODO 
+    функция изменения ширины холста - когда нот больше чем ширина экрана
+    */
+}
+
 class Neck {
     constructor(maxFret, stringsCount) {
         this.minWidth = 800;
@@ -28,6 +123,8 @@ class Neck {
         this.textAlignCoeff = 0.05;
         
         this.menuUtility();
+        
+        this.tabLink = new Tab(this.stringsCount, this.zeroFretNotes);
     }
     
     
@@ -310,9 +407,20 @@ class Neck {
             d3.select('#string-' + j).selectAll('g').remove();
         }
     }
+    dblClickOnFret(id) {
+        this.toggleFretLight(id);
+    }
     //проверить не подсвечена ли эта нота - тогда сделать переход в желтый
     clickOnFret(id) {
-        this.toggleFretLight(id);
+        let finalColor = d3.select('#lt-' + id).attr('fill') == 'yellow'? 'yellow' : 'transparent'; 
+        d3.select('#lt-' + id).attr('fill', '#15d424');
+        d3.select('#lt-' + id).transition()
+            .duration(500)
+            .attr("fill", finalColor);
+        this.tabLink.addNote( { string: Math.floor(id / this.maxFret), 
+                               fret: id % this.maxFret,
+                               note: d3.select('#nt-' + id).text() 
+                              });
     }
     
     changeStringCount(newStringCount) {
@@ -346,14 +454,15 @@ class Neck {
 
 /*TODO--------------
     вынести диапазоны для меню в стоковые параметры
-    
-    
+    БАГ - последний лад записывается неправильно, нулевой лад - как цифра
+    посылка событий изменения числа струн в таб-контейнер
+    оформление таб-контейнера - запись строя, номера ладов и струн
     определить min-width для выпадух - сильно сжимаются на узком экране
-   
+    ? подсветка ладов: даблклик - подсветка на грифе, просто клик - запись в табы и моргание зеленым
     добавить возможность изменять размер шрифта
     добавить возможность локализировать выбор гаммы - нажатия на номера ладов
     пентатоники
-    
+    удаление из табов
     сделать лого белым и в навигации применить фильтр
     transitions
     прозрачные кнопки-прямоугольники поверх всего рисунка грифа - это могут быть уже готовые rect.fret
