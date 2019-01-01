@@ -1,3 +1,5 @@
+import { tunings } from './tunings';
+
 export const sequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 
 export const getNote = ( pos , tuning) => {
@@ -19,3 +21,5 @@ function checkIndex(index) {
     while( !(index < 12) ) index -=12;
     return index;
 }
+
+export const getTuningByName = name => tunings.find(x => x.name === name);

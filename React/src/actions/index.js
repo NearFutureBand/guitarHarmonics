@@ -10,10 +10,13 @@ export function changeFretCount(frets) {
     }
 }
 
-export function changeStringCount(strings) {
+export function changeStringCount(strings, currentTuning) {
     return {
         type: CHANGE_STRING_COUNT,
-        payload: strings
+        payload: {
+            strings,
+            currentTuning
+        }
     }
 }
 

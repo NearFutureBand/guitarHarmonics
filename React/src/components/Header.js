@@ -33,7 +33,13 @@ class Header extends Component {
             <div>
               {
                 this.stringsRange.map( (el) => {
-                  return <span key={el} onClick={ () => changeStringCount(el) }>{el}</span> 
+                  return <span
+                    key={el}
+                    onClick={ () => changeStringCount(el, tuning) }
+                    className={(el === strings )? 'active': ''}
+                  >
+                    {el}
+                  </span> 
                 })
               }
             </div>
@@ -43,7 +49,13 @@ class Header extends Component {
             <div>
               {
                 this.fretsRange.map( (el) => {
-                  return <span key={el} onClick={ () => changeFretCount(el) }>{el}</span> 
+                  return <span 
+                    key={el}
+                    onClick={ () => changeFretCount(el) }
+                    className={(el === frets )? 'active': ''}
+                  >
+                    {el}
+                  </span> 
                 })
               }
             </div>
@@ -53,7 +65,13 @@ class Header extends Component {
             <div>
               {
                 this.tuningsRange.map( (el) => {
-                  return <span key={el} onClick={ () => changeTuning(el) }>{el}</span> 
+                  return <span
+                    key={el}
+                    onClick={ () => changeTuning(el) }
+                    className={(el === tuning.name )? 'active': ''}
+                  >
+                    {el}
+                  </span> 
                 })
               }
             </div>
