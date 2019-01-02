@@ -1,44 +1,69 @@
 @import './parameters.less';
 
-.header-wrapper{
-    width: 100%;
-    padding-bottom: @padding;
-    .header{
-        background-color: @back-color;
-        //height: 15vh;
-        padding: @padding;
-        justify-content: space-around;
-        .nav-block{
-            align-items: center;
+header.header-wrapper{
+  width: 100%;
+  padding-bottom: @padding;
+  .header{
+    background-color: @back-color;
+    justify-content: space-around;
+    .nav-block{
+      align-items: center;
+      flex-flow: column;
+      padding: @padding;
+      .title{
+      }
+
+      .menu{
+        flex-flow: row;
+        >div{
+          flex-flow: column;
+          position: relative;
+          align-items: center;
+          .current{
+            padding: 0 @padding*2;
+          }
+          .current:hover{
+            cursor: pointer;
+          }
+          .dropdown{
+            display: none;
             flex-flow: column;
-            .title{
-
+            position: absolute;
+            top: 100%;
+            z-index: 2;
+            box-shadow: 0 0 5px rgba(0,0,0,.3);
+            background-color: @back-color;
+            >span{
+              padding: @padding/2 @padding*2;
             }
-            >div{
-                flex-wrap: wrap;
-                >span{
-                    padding: 0 @padding/3;
-                    font-size: 2rem;
-                }
-                >span:hover{
-                    cursor: pointer;
-                    background-color: @back-color + #333;
-                }
-                >span.active{
-                    background-color: @back-color - #222;
-                }
+            >span:hover{
+                cursor: pointer;
+                background-color: @back-color + #333;
             }
+            >span.active{
+                background-color: @back-color - #222;
+            }
+          }
         }
-
+        >div:hover{
+          .dropdown{
+            display: flex;
+          }
+        }
+      }
     }
-    input{
-        background-color: transparent;
-        border: none;
-        font-weight: 700;
-        width: 90%;
-        
+    .nav-block:hover{
+      background-color: @back-color - #333;
     }
-    input:hover {
-        background-color: rgba(0,0,0,.2);
-    }
+  }
+  input{
+    background-color: transparent;
+    border: none;
+    font-weight: 700;
+    width: 90%;
+      
+  }
+  input:hover {
+    background-color: rgba(0,0,0,.2);
+  }
 }
