@@ -16,7 +16,7 @@ class Header extends Component {
 
     this.stringsRange = [4,5,6,7,8,9];
     this.fretsRange = [12,13,14,15,16,17,18,19,20,21,22,23,24];
-    this.tuningsRange = ['Standard', 'Drop D', 'Drop C', 'Drop A'];
+    this.tuningsRange = ['Standard', 'Drop D', 'Drop C', 'Drop A', 'Drop E'];
     this.harmonicScalesRange = ['Minor', 'Major'];
     this.harmonicRootsRange = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 

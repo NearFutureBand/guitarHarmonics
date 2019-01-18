@@ -22,5 +22,11 @@ export const tunings = [
         defaulStrings: 6,
         maxStrings: 6,
         tuning: ['E','B','G','D','A','D']
+    },
+    {
+        name: 'Drop E',
+        defaulStrings: 6,
+        maxStrings: 6,
+        tuning: ['F#','C#','A','E','B','E']
     }
 ];
