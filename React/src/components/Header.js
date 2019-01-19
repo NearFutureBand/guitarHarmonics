@@ -7,6 +7,8 @@ import {
   setHarmonic,
   resetHarmonic
 } from '../actions';
+import { tunings } from '../util/tunings';
+import { sequence } from '../util/functions';
 
 import '../css/Header.less';
 
@@ -16,9 +18,9 @@ class Header extends Component {
 
     this.stringsRange = [4,5,6,7,8,9];
     this.fretsRange = [12,13,14,15,16,17,18,19,20,21,22,23,24];
-    this.tuningsRange = ['Standard', 'Drop D', 'Drop C', 'Drop A', 'Drop E'];
+    this.tuningsRange = tunings.map( tun => tun.name);
     this.harmonicScalesRange = ['Minor', 'Major'];
-    this.harmonicRootsRange = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+    this.harmonicRootsRange = sequence;
 
     this.state = {
       chosenHarmonic: {
