@@ -1,12 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { 
-  changeFretCount,
-  changeTuning,
-  changeStringCount,
-  setHarmonic,
-  resetHarmonic
-} from '../actions';
+import * as actions from '../actions';
 import { tunings } from '../util/tunings';
 import { sequence } from '../util/functions';
 
@@ -20,7 +14,8 @@ class Header extends Component {
     this.fretsRange = [12,13,14,15,16,17,18,19,20,21,22,23,24];
     this.tuningsRange = tunings.map( tun => tun.name);
     this.harmonicScalesRange = ['Minor', 'Major'];
-    this.harmonicRootsRange = sequence;
+    this.harmonicRootsRange = sequence['en'];
+    this.langsRange = ['en', 'ru'];
 
     this.state = {
       chosenHarmonic: {
@@ -56,7 +51,8 @@ class Header extends Component {
       changeStringCount,
       changeFretCount,
       changeTuning,
-      harmonic
+      changeLanguage,
+      language
     } = this.props;
 
     const {
@@ -173,6 +169,28 @@ class Header extends Component {
             </div>
           </div>
 
+          <div className="nav-block">
+            <span className="title">language</span>
+            <div className="menu">
+              <div>
+                <span className="current">{language}</span>
+                <div className="dropdown">
+                  {
+                    this.langsRange.map( el => {
+                      return <span
+                        key={el}
+                        onClick={ () => changeLanguage(el) }
+                        className={(el === language )? 'active': ''}
+                      >
+                        {el}
+                      </span>
+                    })
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </header>
     );
@@ -185,14 +203,16 @@ function mapStateToProps( state ) {
     tuning: state.tuning,
     frets: state.frets,
     strings: state.strings,
-    harmonic: state.harmonic
+    harmonic: state.harmonic,
+    language: state.system.language
   };
 }
 
 export default connect(mapStateToProps, { 
-  changeFretCount,
-  changeStringCount,
-  changeTuning,
-  setHarmonic,
-  resetHarmonic
+  changeFretCount: actions.changeFretCount,
+  changeStringCount: actions.changeStringCount,
+  changeTuning: actions.changeTuning,
+  setHarmonic: actions.setHarmonic,
+  resetHarmonic: actions.resetHarmonic,
+  changeLanguage: actions.changeLanguage
 })(Header);

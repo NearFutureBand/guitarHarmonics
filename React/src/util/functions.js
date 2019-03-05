@@ -1,22 +1,41 @@
 import { tunings } from './tunings';
 
-export const sequence = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
-const minorHarmonicRule = 'THTTHTT';
-const majorHarmonicRule = 'TTHTTTH';
+export const sequence = {
+  'en': ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
+  'ru': ['До','До#','Рэ','Рэ#','Ми','Фа','Фа#','Соль','Соль#','Ля','Ля#','Си']
+}
+const minorHarmonicRule = 'WHWWHWW';
+const majorHarmonicRule = 'WWHWWWH';
 
-export const getNote = ( pos , tuning) => {
+/*const translations = {
+  'C': 'До',
+  'C#': 'До#',
+  'D': 'Рэ',
+  'D#': 'Рэ#',
+  'E': 'Ми',
+  'F': 'Фа',
+  'F#': 'Фа#',
+  'G': 'Соль',
+  'G#': 'Соль#',
+  'A' : 'Ля',
+  'A#': 'Ля#',
+  'B': 'Си'
+}*/
+
+
+export const getNote = ( pos , tuning, lang) => {
     const open = tuning.tuning[pos[0] - 1];
-    return sequence[ checkIndex( sequence.indexOf(open) + pos[1] ) ];
+    return sequence['en'][ checkIndex( sequence['en'].indexOf(open) + pos[1] ) ];
 }
 
-const getNextNote = (note, distance) => {
-    let index = sequence.indexOf(note);
-    if(distance == 'T') {
+const getNextNote = (note, distance, lang) => {
+    let index = sequence['en'].indexOf(note);
+    if(distance == 'W') {
         index+=2;
     } else {
         index++;
     }
-    return sequence[ checkIndex(index)];
+    return sequence['en'][ checkIndex(index)];
 }
 
 const checkIndex = (index) => {
