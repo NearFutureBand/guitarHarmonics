@@ -1,111 +1,63 @@
 <template>
-    <div id="app">
-        <!--<img alt="Vue logo" src="./assets/logo.png">
-        <HelloWorld msg="Welcome to Your Vue.js App" />-->
-        <div id="neck-container">
-            <div class="string" v-for="(string, i) in tuning" :id="'string-' + i">
-                <Fret v-for="(f, j) in frets[i]" :stringsCount="stringsCount" :fretsCount="fretsCount" :position="[j,i]" :note="f" />
-            </div>
-        </div>
-    </div>
+  <div id="app">
+    <Header />
+    <Neck />
+  </div>
 </template>
 
 <script>
-    import HelloWorld from './components/HelloWorld.vue'
-    import Fret from './components/Fret.vue'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Neck from './components/Neck.vue'
+import Header from './components/Header.vue'
 
-    export default {
-        name: 'app',
-        mounted: function() {
+Vue.use(Vuex);
 
-        },
-        components: {
-            Fret
-        },
-        data: () => {
-            return {
-                stringsCount: 6,
-                fretsCount: 12,
-
-                /*Flat notes of the standard guitar's tuning*/
-                defaultTuning: ["Z", "E", "B", "G", "D", "A", "E", "B", "G", "D", "A", "E"],
-                /*Full octave*/
-                octave: ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"],
-
-
-                /*Graphic parameters*/
-                neckWidth: 0,
-                neckHeight: 0,
-                padding: window.innerWidth * 0.01,
-
-            }
-        },
-        computed: {
-            tuning: function() {
-                return this.defaultTuning.slice(0, this.stringsCount + 1);
-            },
-
-            frets: function() {
-                let frets = [];
-                let i = 0,
-                    j = 0,
-                    oneString = [];
-
-                for (i = 0; i <= this.fretsCount; i++) {
-                    oneString.push(i.toString());
-                }
-                frets.push(oneString);
-
-                for (i = 1; i <= this.stringsCount; i++) {
-
-                    oneString = [this.tuning[i]];
-
-                    for (j = 1; j <= this.fretsCount; j++) {
-                        oneString.push(this.getNextNote(oneString[j - 1], 'П'));
-                    }
-                    frets.push(oneString);
-                }
-                console.log(frets[1]);
-                return frets;
-            },
-        },
-        methods: {
-            checkIndex: function(index) {
-                while (!(index < 12)) index -= 12;
-                return index;
-            },
-            getNextNote: function(note, distance) {
-                let index = this.octave.indexOf(note);
-                if (distance == 'Т') {
-                    index += 2;
-                } else {
-                    index++;
-                }
-                return this.octave[this.checkIndex(index)];
-            }
-        }
+const store = new Vuex.Store({
+    state: {
+      strings: 6,
+      tuning: 'Standard',
+      frets: 22
+    },
+    mutations: {
+      setStringCount (state, payload) {
+        state.strings = payload.amount;
+        console.log(payload);
+      }
     }
+})
+
+export default {
+  name: 'App',
+  store,
+  components: {
+    Header,
+    Neck
+  }
+}
 </script>
 
-<style>
-    #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        color: #333;
-        width: 100%;
-        height: 100%;
-        padding: 1vw;
-        box-sizing: border-box;
-    }
+<style lang="less">
+body, html {
+  margin: 0;
+  padding: 0;
+  color: #333;
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+body {
+  .app{
+    width: 100%;
+    overflow-x: hidden;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-items: center;
+  }
+}
+*{
+  box-sizing: border-box;
+}
 
-    #neck-container {
-        background-color: #eee;
-        width: 100%;
-    }
-
-    .string {
-        display: flex;
-        flex-flow: row;
-    }
 </style>
