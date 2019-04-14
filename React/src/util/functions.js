@@ -6,6 +6,8 @@ export const sequence = {
 }
 const minorHarmonicRule = 'WHWWHWW';
 const majorHarmonicRule = 'WWHWWWH';
+const locrianRule = 'HWWHWWW';
+const phrygianRule = 'HWWWHWW';
 
 /*const translations = {
   'C': 'До',
@@ -47,8 +49,13 @@ export const getTuningByName = name => tunings.find(x => x.name === name);
 
 export const findHarmonic = (root, scale) => {
     let selection = {};
-    let currentNote = root,
-    rule = (scale == 'Minor') ? minorHarmonicRule : majorHarmonicRule;
+    let currentNote = root, rule = '';
+    switch(scale) {
+        case 'Minor': rule = minorHarmonicRule;
+        case 'Major': rule = majorHarmonicRule;
+        case 'Locrian': rule = locrianRule;
+        case 'Phrygian': rule = phrygianRule;
+    }
     
     selection[currentNote] = true;
     for( let i = 0; i < rule.length; i++) {

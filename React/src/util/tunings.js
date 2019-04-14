@@ -12,6 +12,12 @@ export const tunings = [
         tuning: ['E','B','G','D','A','E','A']
     },
     {
+        name: 'EBGDADA',
+        defaulStrings: 7,
+        maxStrings: 7,
+        tuning: ['E','B','G','D','A','D','A']
+    },
+    {
         name: 'Drop C',
         defaulStrings: 6,
         maxStrings: 6,
