@@ -1,16 +1,30 @@
 <template>
   <div class="neck-wrapper">
     <div class="neck">
+      <GuitarString
+        v-for="(string, i) in (strings + 1) "
+        :key="i"
+        :number="i"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import GuitarString from './GuitarString.vue';
+import { mapState } from 'vuex';
+
 export default {
   name: 'Neck',
+  components: {
+    GuitarString
+  },
   props: {
     //msg: String
-  }
+  },
+  computed: mapState([
+    'strings'
+  ])
 }
 </script>
 
@@ -20,9 +34,11 @@ export default {
     width: 100%;
     padding: 0.5rem 1rem;
     .neck{
-      background-color: blueviolet;
+      background-color: #eee;
       width: 100%;
       height: 50vh;
+      display: flex;
+      flex-flow: column;
     }
   }
   
