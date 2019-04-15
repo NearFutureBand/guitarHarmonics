@@ -9,11 +9,10 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Neck from './components/Neck.vue'
-import Header from './components/Header.vue'
-import store from './store';
+import Neck from './components/Neck.vue';
+import Header from './components/Header.vue';
+import store from './store.js';
 
-Vue.use(Vuex);
 
 export default {
   name: 'App',
@@ -38,17 +37,21 @@ body, html {
   overflow-x: hidden;
 }
 body {
-  .app{
+  #app{
     width: 100%;
     overflow-x: hidden;
     height: 100%;
     display: flex;
     flex-flow: column;
-    justify-items: center;
+    overflow-x: scroll;
+    justify-content: center;
+    align-content: center;
   }
 }
 *{
   box-sizing: border-box;
 }
-
+div{
+  display: flex;
+}
 </style>

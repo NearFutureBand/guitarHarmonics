@@ -1,11 +1,13 @@
 <template>
   <div class="neck-wrapper">
     <div class="neck">
-      <GuitarString
-        v-for="(string, i) in (strings + 1) "
-        :key="i"
-        :number="i"
-      />
+      <template v-if="matrix.length === strings + 1">
+        <GuitarString
+          v-for="(string, i) in (strings + 1) "
+          :key="i"
+          :number="i"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -20,7 +22,8 @@ export default {
     GuitarString
   },
   computed: mapState([
-    'strings'
+    'strings',
+    'matrix'
   ])
 }
 </script>
@@ -34,7 +37,6 @@ export default {
       background-color: #eee;
       width: 100%;
       height: 50vh;
-      display: flex;
       flex-flow: column;
     }
   }

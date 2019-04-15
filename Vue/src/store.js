@@ -1,5 +1,8 @@
-import Vuex from 'vuex';
 import axios from 'axios';
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
@@ -27,10 +30,10 @@ const store = new Vuex.Store({
         .then( res => res.data);
       commit('setMatrix', response);
     },
-    changeStringCount({ commit, dispatch }, payload) {
+    changeStringCount({ commit, dispatch }, { payload }) {
       commit({
         type: 'setStringCount',
-        payload
+        ...payload
       });
       dispatch('fetchMatrix');
     }
