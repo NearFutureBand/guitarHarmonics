@@ -7,11 +7,9 @@
 
 <script>
 
-import Vue from 'vue';
-import Vuex from 'vuex';
 import Neck from './components/Neck.vue';
 import Header from './components/Header.vue';
-import store from './store.js';
+import store from './store/index';
 
 
 export default {
