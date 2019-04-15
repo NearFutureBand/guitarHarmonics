@@ -1,0 +1,46 @@
+{
+  "minor" : {
+    "name": {
+      "en" : "Aeolian (Natural minor)",
+      "ru" : "Эолийский (Натуральный минор)"
+    },
+    "shortName" : {
+      "en" : "minor",
+      "ru" : "минор"
+    },
+    "formula": "WHWWHWW"
+  },
+  "major" : {
+    "name": {
+      "en" : "Ionian (Natural major)",
+      "ru" : "Ионийский (Натуральный мажор)"
+    },
+    "shortName" : {
+      "en" : "major",
+      "ru" : "мажор"
+    },
+    "formula": "WWHWWWH"
+  },
+  "phrygian" : {
+    "name": {
+      "en" : "Phrygian",
+      "ru" : "Фригийский"
+    },
+    "shortName" : {
+      "en": "phrygian",
+      "ru" : "фригийский"
+    },
+    "formula": "HWWWHWW"
+  },
+  "locrian" : {
+    "name": {
+      "en" : "Locrian",
+      "ru" : "Локрийский"
+    },
+    "shortName": {
+      "en": "locrian",
+      "ru" : "локрийский"
+    }, 
+    "formula": "HWWHWWW"
+  }
+}

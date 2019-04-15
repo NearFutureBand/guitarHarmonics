@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const router = new Router();
-const { createFretMatrix } = require('./functions');
+const { createFretMatrix, findHarmonic } = require('./functions');
 
 const handleError = (err, ctx) => {
   console.log(err.details);
@@ -16,12 +16,20 @@ router.get('/', async (ctx) => {
   }
 });
 
-router.get('/vitrual/api/v2/fretboard/:tuning/:strings/:frets', async(ctx) => {
+router.get('/vitrual/api/v1/fretboard/:tuning/:strings/:frets', async(ctx) => {
   try {
     ctx.body = createFretMatrix(ctx.params);
   } catch(err) {
     handleError(err, ctx);
   }
 });
+
+router.get('/virtual/api/v1/harmonic/:root/:scale', async(ctx) => {
+  try {
+    ctx.body = findHarmonic(ctx.params);
+  } catch(err) {
+    handleError(err, ctx);
+  }
+})
 
 module.exports = router;

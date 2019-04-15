@@ -1,10 +1,6 @@
 const tunings = require('./tunings.json');
 const sequence = require('./sequence.json');
-
-const minorHarmonicRule = 'WHWWHWW';
-const majorHarmonicRule = 'WWHWWWH';
-const locrianRule = 'HWWHWWW';
-const phrygianRule = 'HWWWHWW';
+const SCALES = require('./scales.json');
 
 /*const translations = {
   'C': 'До',
@@ -21,12 +17,23 @@ const phrygianRule = 'HWWWHWW';
   'B': 'Си'
 }*/
 
-
+/**
+ * Returns a one note with given coordinates on a fretboard
+ * @param {Array} pos [0] - string number (from 1 to N), [1] - fret number (from 0 to N) 
+ * @param {*} tuning what's the type?
+ * @param {String} lang
+ */
 const getNote = ( pos , tuning, lang) => {
   const open = tuning.tuning[pos[0] - 1];
   return sequence['en'][ checkIndex( sequence['en'].indexOf(open) + pos[1] ) ];
 }
 
+/**
+ * Returns a note that is on the distance from the given note
+ * @param {String} note name of the note the step is made from
+ * @param {String} distance W (whole step) or H (half step) 
+ * @param {String} lang
+ */
 const getNextNote = (note, distance, lang) => {
   let index = sequence['en'].indexOf(note);
   if(distance == 'W') {
@@ -36,24 +43,25 @@ const getNextNote = (note, distance, lang) => {
   }
   return sequence['en'][ checkIndex(index)];
 }
-
+/**
+ * Makes sure that there's no access to a 13'th note :)
+ * @param {*} index 
+ */
 const checkIndex = (index) => {
   while( !(index < 12) ) index -=12;
   return index;
 }
 
-const getTuningByName = name => tunings.find(x => x.name === name);
-
-const findHarmonic = (root, scale) => {
+/**
+ * Returns a collection of notes that are in the requested harmonic 
+ * @param {String} root main note of the harmonic
+ * @param {String} scale the id of the scale (using as a key in the json)
+ */
+const findHarmonic = ({ root, scale }) => {
   let selection = {};
-  let currentNote = root, rule = '';
-  switch(scale) {
-      case 'Minor': rule = minorHarmonicRule;
-      case 'Major': rule = majorHarmonicRule;
-      case 'Locrian': rule = locrianRule;
-      case 'Phrygian': rule = phrygianRule;
-  }
-  
+  let currentNote = root;
+  const rule = SCALES[scale].formula;
+
   selection[currentNote] = true;
   for( let i = 0; i < rule.length; i++) {
       currentNote = getNextNote(currentNote, rule[i]);
@@ -85,7 +93,6 @@ module.exports = {
   getNote,
   getNextNote,
   checkIndex,
-  getTuningByName,
   findHarmonic,
   createFretMatrix
 }
