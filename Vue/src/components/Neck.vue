@@ -11,16 +11,13 @@
 </template>
 
 <script>
-import GuitarString from './GuitarString.vue';
 import { mapState } from 'vuex';
+import GuitarString from './GuitarString.vue';
 
 export default {
   name: 'Neck',
   components: {
     GuitarString
-  },
-  props: {
-    //msg: String
   },
   computed: mapState([
     'strings'

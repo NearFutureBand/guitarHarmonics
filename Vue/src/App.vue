@@ -6,47 +6,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 import Vue from 'vue';
 import Vuex from 'vuex';
 import Neck from './components/Neck.vue'
 import Header from './components/Header.vue'
+import store from './store';
 
 Vue.use(Vuex);
-
-const store = new Vuex.Store({
-    state: {
-      strings: 6,
-      tuning: 'Standard',
-      frets: 22,
-      matrix: []
-    },
-    getters: {
-      
-    },
-    mutations: {
-      setStringCount (state, payload) {
-        state.strings = payload.amount;
-      },
-      setMatrix (state, payload) {
-        state.matrix = payload;
-      }
-    },
-    actions: {
-      async fetchMatrix ({ commit, state }) {
-        const response = await axios.get(`http://localhost:3001/vitrual/api/v1/fretboard/${state.tuning}/${state.strings}/${state.frets}`)
-          .then( res => res.data);
-        commit('setMatrix', response);
-      },
-      changeStringCount({ commit, dispatch }, payload) {
-        commit({
-          type: 'setStringCount',
-          payload
-        });
-        dispatch('fetchMatrix');
-      }
-    }
-})
 
 export default {
   name: 'App',
