@@ -1,14 +1,24 @@
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
+import strings from './modules/strings';
+import frets from './modules/frets';
+import tuning from './modules/tuning';
+import harmonic from './modules/harmonic';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  modules: {
+    strings,
+    frets,
+    tuning,
+    harmonic
+  },
   state: {
-    strings: 6,
+    /*strings: 6,
     tuning: 'Standard',
-    frets: 22,
+    frets: 22,*/
     matrix: []
   },
   getters: {
@@ -17,9 +27,9 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    setStringCount (state, payload) {
+    /*setStringCount (state, payload) {
       state.strings = payload.amount;
-    },
+    },*/
     setMatrix (state, payload) {
       state.matrix = payload;
     }
@@ -30,13 +40,13 @@ const store = new Vuex.Store({
         .then( res => res.data);
       commit('setMatrix', response);
     },
-    changeStringCount({ commit, dispatch }, { payload }) {
+    /*changeStringCount({ commit, dispatch }, { payload }) {
       commit({
         type: 'setStringCount',
         ...payload
       });
       dispatch('fetchMatrix');
-    }
+    }*/
   }
 });
 
