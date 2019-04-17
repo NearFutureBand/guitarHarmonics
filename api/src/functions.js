@@ -74,7 +74,6 @@ const findHarmonic = ({ root, scale }) => {
 };
 
 const createFretMatrix = ({ frets, strings, tuning }) => {
-  console.log(TUNINGS[tuning]);
   const matrix = [];
   let i = 0;
   let j = 0;
@@ -86,7 +85,7 @@ const createFretMatrix = ({ frets, strings, tuning }) => {
 
       else if (i > 0 && j === 0) {
         // if it's a zeroth fret - open note. Getting it from the tuning
-        if (j === 0) matrix[i].push(TUNINGS[tuning].formula[i - 1]);
+        if (j === 0) matrix[i].push(TUNINGS[tuning].tuning[i - 1]);
       } else {
         matrix[i].push(getNextNote(matrix[i][j - 1], 'H'));
       }

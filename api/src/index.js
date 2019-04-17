@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 const Router = require('koa-router');
+const _ = require('lodash');
+const TUNINGS = require('./tunings.json');
 
 const router = new Router();
 const { createFretMatrix, findHarmonic } = require('./functions');
@@ -29,6 +31,14 @@ router.get('/vitrual/api/v1/fretboard/:tuning/:strings/:frets', async (ctx) => {
 router.get('/virtual/api/v1/harmonic/:root/:scale', async (ctx) => {
   try {
     ctx.body = findHarmonic(ctx.params);
+  } catch (err) {
+    handleError(err, ctx);
+  }
+});
+
+router.get('/virtual/api/v1/available-tunings', async (ctx) => {
+  try {
+    ctx.body = TUNINGS;
   } catch (err) {
     handleError(err, ctx);
   }
