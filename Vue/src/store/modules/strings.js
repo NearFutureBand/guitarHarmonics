@@ -4,20 +4,12 @@ const strings = {
     count: 6
   },
   mutations: {
-    change (state, payload) {
+    setCount (state, { payload }) {
       state.count = payload.amount;
     }
   },
   getters: {  },
-  actions: {
-    change({ commit }, payload) {
-      commit({
-        type: 'change',
-        payload
-      })
-      //dispatch action to recreate matrix in main store
-    }
-  }
+  actions: {  }
 }
 
 export default strings;

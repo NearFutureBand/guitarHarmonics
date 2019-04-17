@@ -12,7 +12,7 @@
                 v-for="el in stringsRange"
                 :key="el"
                 :class="(el===strings)? 'active': ''"
-                @click="() => changeStringCount({ amount: el, tuning })"
+                @click="() => changeStringCount({ amount: el, tuningId })"
               >
                 {{ el }}
               </span>
@@ -31,23 +31,25 @@ import { mapState } from 'vuex';
 export default {
   name: 'Header',
   data: () => ({
-    chosenHarmonic: {
-      root: null,
-      scale: null
-    },
     stringsRange: [4,5,6,7,8,9]
   }),
   props: {},
-  computed: mapState([
-    'strings',
-    'frets',
-    'tuning'
-  ]),
+  computed: mapState({
+    strings: state => state.strings.count,
+    frets: state => state.frets.count,
+    tuningId: state => state.tuning.tuningId
+  }),
   methods: {
-    changeStringCount (params) {
+    changeStringCount (payload) {
       this.$store.dispatch({
         type: 'changeStringCount',
-        payload: params
+        payload
+      });
+    },
+    changeFretCount (payload) {
+      this.$store.dispatch({
+        type: 'changeFretCount',
+        payload
       });
     }
   }

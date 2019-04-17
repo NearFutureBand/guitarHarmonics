@@ -20,9 +20,9 @@ export default {
   props: {
     number: Number
   },
-  computed: mapState([
-    'frets'
-  ])
+  computed: mapState({
+    frets: state => state.frets.count
+  })
 }
 </script>
 

@@ -21,10 +21,14 @@ export default {
   components: {
     GuitarString
   },
-  computed: mapState([
-    'strings',
-    'matrix'
-  ])
+  computed: {
+    strings() {
+      return this.$store.state.strings.count;
+    },
+    matrix() {
+      return this.$store.state.matrix;
+    }
+  }
 }
 </script>
 
