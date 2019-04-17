@@ -4,7 +4,7 @@ const frets = {
     count: 22
   },
   mutations: {
-    setCount (state, { payload }) {
+    setCount (state, payload) {
       state.count = payload.amount;
     }
   },

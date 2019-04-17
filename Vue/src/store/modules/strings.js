@@ -4,7 +4,7 @@ const strings = {
     count: 6
   },
   mutations: {
-    setCount (state, { payload }) {
+    setCount (state, payload) {
       state.count = payload.amount;
     }
   },

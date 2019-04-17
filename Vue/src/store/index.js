@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
+
 import strings from './modules/strings';
 import frets from './modules/frets';
 import tuning from './modules/tuning';
@@ -19,7 +20,7 @@ const store = new Vuex.Store({
     matrix: []
   },
   getters: {
-    getNoteByPos: (state) => (pos) => {
+    getNoteByPos: state => pos => {
       return state.matrix[pos[0]][pos[1]]
     }
   },
@@ -32,32 +33,28 @@ const store = new Vuex.Store({
     async fetchMatrix ({ commit, state }) {
       const response = await axios
         .get(
-          `http://localhost:3001/vitrual/api/v1/fretboard/${state.tuning.tuningId}/${state.strings.count}/${state.frets.count}`
+          `http://localhost:3001/vitrual/api/v1/fretboard/${state.tuning.id}/${state.strings.count}/${state.frets.count}`
         ).then( res => res.data);
       commit('setMatrix', response);
     },
-    changeStringCount({ commit, dispatch }, { payload }) {
-      
-      //check tuning
 
-      commit({
-        type: 'strings/setCount',
-        payload
-      });
+    changeStringCount({ commit, dispatch, getters, state }, { payload }) {
+      const currentTuning = getters['tuning/tuningById'](state.tuning.id);
+      commit('strings/setCount',
+        { amount: currentTuning.maxStrings < payload.amount ? currentTuning.defaultStrings : payload.amount }
+      );
       dispatch('fetchMatrix');
     },
+
     changeFretCount({ commit, dispatch }, { payload }) {
-      commit({
-        type: 'frets/setCount',
-        payload
-      });
+      commit('frets/setCount', payload);
       dispatch('fetchMatrix');
     },
-    changeTuning({ commit, dispatch }, { payload }) {
-      commit({
-        type: 'tuning/setTuning',
-        payload
-      });
+
+    changeTuning({ commit, dispatch, getters }, { payload }) {
+      const targetTuning = getters['tuning/tuningById'](payload.tuningId);
+      commit('strings/setCount', { amount: targetTuning.defaultStrings });
+      commit('tuning/setTuning', payload);
       dispatch('fetchMatrix');
     }
   }

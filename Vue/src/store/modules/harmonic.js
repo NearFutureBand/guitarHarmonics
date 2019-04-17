@@ -1,7 +1,11 @@
 const harmonic = {
   namespaced: true,
   state: {
-    harmonicNotes: {}
+    harmonicNotes: {},
+    root: null,
+    scale: null,
+    rooots: [],
+    scales: []
   },
   mutations: {
     change (state, payload) {

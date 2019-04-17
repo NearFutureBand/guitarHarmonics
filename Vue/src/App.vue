@@ -21,6 +21,7 @@ export default {
   },
   created() {
     this.$store.dispatch('fetchMatrix');
+    this.$store.dispatch('tuning/fetchTunings');
   }
 }
 </script>

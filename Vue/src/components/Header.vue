@@ -9,12 +9,50 @@
             <span class="current">{{ strings }}</span>
             <div class="dropdown">
               <span
-                v-for="el in stringsRange"
+                v-for="el in STRINGS_RANGE"
                 :key="el"
                 :class="(el===strings)? 'active': ''"
-                @click="() => changeStringCount({ amount: el, tuningId })"
+                @click="() => changeStringCount({ amount: el })"
               >
                 {{ el }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-block">
+        <span class="title">frets</span>
+        <div class="menu">
+          <div>
+            <span class="current">{{ frets }}</span>
+            <div class="dropdown">
+              <span
+                v-for="el in FRETS_RANGE"
+                :key="el"
+                :class="(el===frets)? 'active': ''"
+                @click="() => changeFretCount({ amount: el })"
+              >
+                {{ el }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-block">
+        <span class="title">tunings</span>
+        <div class="menu">
+          <div>
+            <span class="current">{{ tuningName }}</span>
+            <div class="dropdown">
+              <span
+                v-for="el in tunings"
+                :key="el.id"
+                :class="(el.id === tuningId)? 'active': ''"
+                @click="() => changeTuning({ tuningId: el.id, tuningName: el.name })"
+              >
+                {{ el.name }}
               </span>
             </div>
           </div>
@@ -26,19 +64,26 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'Header',
-  data: () => ({
-    stringsRange: [4,5,6,7,8,9]
+  data: () => ({ 
+    STRINGS_RANGE: [4,5,6,7,8,9],
+    FRETS_RANGE: [12,13,14,15,16,17,18,19,20,21,22,23,24]
   }),
   props: {},
-  computed: mapState({
-    strings: state => state.strings.count,
-    frets: state => state.frets.count,
-    tuningId: state => state.tuning.tuningId
-  }),
+  computed: {
+    ...mapGetters({
+      tunings: 'tuning/namesAndIds'
+    }),
+    ...mapState({
+      strings: state => state.strings.count,
+      frets: state => state.frets.count,
+      tuningName: state => state.tuning.name,
+      tuningId: state => state.tuning.id
+    })
+  },
   methods: {
     changeStringCount (payload) {
       this.$store.dispatch({
@@ -51,6 +96,12 @@ export default {
         type: 'changeFretCount',
         payload
       });
+    },
+    changeTuning (payload) {
+      this.$store.dispatch({
+        type: 'changeTuning',
+        payload
+      })
     }
   }
 }
