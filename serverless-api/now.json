@@ -3,6 +3,7 @@
   "version": 2,
   "builds": [{ "src": "**/*.js", "use": "@now/node" }],
   "routes": [
-    { "src": "api/tunings/index.js", "dest": "api/tunings" }
+    { "src": "api/tunings/index.js", "dest": "api/tunings" },
+    { "src": "api/fretboard/index.js", "dest": "api/fretboard"}
   ]
 }

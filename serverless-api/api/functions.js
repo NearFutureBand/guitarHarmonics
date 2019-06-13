@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
-const TUNINGS = require('./tunings.json');
+const TUNINGS = require('./tunings/tunings.json');
 const sequence = require('./sequence.json');
-const SCALES = require('./scales.json');
+const SCALES = require('./scales/scales.json');
 
 /* const translations = {
   'C': 'До',
