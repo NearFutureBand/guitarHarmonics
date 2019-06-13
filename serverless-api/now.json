@@ -1,0 +1,8 @@
+{
+  "name": "guitar-harmonics-api",
+  "version": 2,
+  "builds": [{ "src": "**/*.js", "use": "@now/node" }],
+  "routes": [
+    { "src": "api/tunings/index.js", "dest": "api/tunings" }
+  ]
+}

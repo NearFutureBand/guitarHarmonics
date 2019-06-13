@@ -1,0 +1,44 @@
+{
+  "Standard" : {
+    "name": "Standard",
+    "formula": "EBGDAEBF#C#",
+    "defaultStrings": 6,
+    "maxStrings": 9,
+    "tuning": ["E","B","G","D","A","E","B","F#","C#"]
+  },
+  "EBGDAEA" : {
+    "name": "Drop A (7 strings)",
+    "formula": "EBGDAEA",
+    "defaultStrings": 7,
+    "maxStrings": 7,
+    "tuning": ["E","B","G","D","A","E","A"]
+  },
+  "EBGDADA" : {
+    "name": "EBGDADA",
+    "formula": "EBGDADA",
+    "defaultStrings": 7,
+    "maxStrings": 7,
+    "tuning": ["E","B","G","D","A","D","A"]
+  },
+  "DAFCGC" : {
+    "name": "Drop C",
+    "formula": "DAFCGC",
+    "defaultStrings": 6,
+    "maxStrings": 6,
+    "tuning": ["D","A","F","C","G","C"]
+  },
+  "EBGDAD" : {
+    "name": "Drop D",
+    "formula": "EBGDAD",
+    "defaultStrings": 6,
+    "maxStrings": 6,
+    "tuning": ["E","B","G","D","A","D"]
+  },
+  "F#C#AEBE" : {
+    "name": "Drop E",
+    "formula": "F#C#AEBE",
+    "defaultStrings": 6,
+    "maxStrings": 6,
+    "tuning": ["F#","C#","A","E","B","E"]
+  }
+}
