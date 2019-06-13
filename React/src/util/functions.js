@@ -7,7 +7,8 @@ export const sequence = {
 const minorHarmonicRule = 'WHWWHWW';
 const majorHarmonicRule = 'WWHWWWH';
 const locrianRule = 'HWWHWWW';
-const phrygianRule = 'HWWWHWW';
+const phrygianRule = 'HWWWHW';
+//const melodicMinorRule = 'WHWWH3H';
 
 /*const translations = {
   'C': 'До',
@@ -34,8 +35,10 @@ const getNextNote = (note, distance, lang) => {
     let index = sequence['en'].indexOf(note);
     if(distance == 'W') {
         index+=2;
-    } else {
+    } else if (distance === 'H'){
         index++;
+    } else if (distance === '3') {
+        index+=3;
     }
     return sequence['en'][ checkIndex(index)];
 }
@@ -50,17 +53,17 @@ export const getTuningByName = name => tunings.find(x => x.name === name);
 export const findHarmonic = (root, scale) => {
     let selection = {};
     let currentNote = root, rule = '';
-    switch(scale) {
-        case 'Minor': rule = minorHarmonicRule;
-        case 'Major': rule = majorHarmonicRule;
-        case 'Locrian': rule = locrianRule;
-        case 'Phrygian': rule = phrygianRule;
-    }
-    
+    rule =
+        scale === 'Minor' ? minorHarmonicRule :
+        scale === 'Major' ? majorHarmonicRule :
+        scale === 'Locrian' ? locrianRule :
+        scale === 'Phrygian' ? phrygianRule : '';
     selection[currentNote] = true;
+    console.log(rule);
     for( let i = 0; i < rule.length; i++) {
         currentNote = getNextNote(currentNote, rule[i]);
         selection[currentNote] = true;
     }
+    console.log(selection);
     return selection;
 }

@@ -49,8 +49,10 @@ const getNextNote = (note, distance) => {
   let index = sequence.en.indexOf(note);
   if (distance === 'W') {
     index += 2;
-  } else {
+  } else if (distance === 'H') {
     index++;
+  } else if ( distance === '3') {
+    index += 3;  
   }
   return sequence.en[checkIndex(index)];
 };

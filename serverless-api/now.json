@@ -4,6 +4,7 @@
   "builds": [{ "src": "**/*.js", "use": "@now/node" }],
   "routes": [
     { "src": "api/tunings/index.js", "dest": "api/tunings" },
-    { "src": "api/fretboard/index.js", "dest": "api/fretboard"}
+    { "src": "api/fretboard/index.js", "dest": "api/fretboard" },
+    { "src": "api/harmonics/index.js", "dest": "api/harmonics" }
   ]
 }

@@ -10,6 +10,17 @@
     },
     "formula": "WHWWHWW"
   },
+  "melodicMinor" : {
+    "name": {
+      "en" : "Melodic minor",
+      "ru" : "Мелодический минор"
+    },
+    "shortName" : {
+      "en" : "melodicMinor",
+      "ru" : "мелодический минор"
+    },
+    "formula": "WHWWH3H"
+  },
   "major" : {
     "name": {
       "en" : "Ionian (Natural major)",
