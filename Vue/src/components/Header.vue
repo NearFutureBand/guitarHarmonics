@@ -51,8 +51,42 @@
                 :key="el.id"
                 :class="(el.id === tuningId)? 'active': ''"
                 @click="() => changeTuning({ tuningId: el.id, tuningName: el.name })"
+
               >
                 {{ el.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-block">
+        <span class="title">harmonic</span>
+        <div class="menu">
+          <div>
+            <span class="current">{{ root? root : 'root' }}</span>
+            <div class="dropdown">
+              <span
+                v-for="el in ROOTS"
+                :key="el"
+                :class="(el === root)? 'active': ''"
+                @click="() => changeHarmonic({ root: el, scale })"  
+              >
+                {{el}}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <span class="current">{{ scale? scale : 'scale' }}</span>
+            <div class="dropdown">
+              <span
+                v-for="el in scales"
+                :key="el"
+                :class="(el === scale )? 'active': ''"
+                @click="() => changeHarmonic({ root, scale: el })"
+              >
+                {{el}}
               </span>
             </div>
           </div>
@@ -70,18 +104,22 @@ export default {
   name: 'Header',
   data: () => ({ 
     STRINGS_RANGE: [4,5,6,7,8,9],
-    FRETS_RANGE: [12,13,14,15,16,17,18,19,20,21,22,23,24]
+    FRETS_RANGE: [12,13,14,15,16,17,18,19,20,21,22,23,24],
+    ROOTS: ['A','A#','B','C','C#','D','D#','E','F','F#','G','G#']
   }),
   props: {},
   computed: {
     ...mapGetters({
-      tunings: 'tuning/namesAndIds'
+      tunings: 'tuning/namesAndIds',
+      scales: 'harmonic/scales',
     }),
     ...mapState({
       strings: state => state.strings.count,
       frets: state => state.frets.count,
       tuningName: state => state.tuning.name,
-      tuningId: state => state.tuning.id
+      tuningId: state => state.tuning.id,
+      root: state => state.harmonic.root,
+      scale: state => state.harmonic.scale
     })
   },
   methods: {
@@ -101,7 +139,13 @@ export default {
       this.$store.dispatch({
         type: 'changeTuning',
         payload
-      })
+      });
+    },
+    changeHarmonic (payload) {
+      this.$store.dispatch({
+        type: 'changeHarmonic',
+        payload
+      });
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header />
-    <Neck />
+    <!--<Neck />-->
   </div>
 </template>
 
@@ -22,6 +22,7 @@ export default {
   created() {
     this.$store.dispatch('fetchMatrix');
     this.$store.dispatch('tuning/fetchTunings');
+    this.$store.dispatch('harmonic/fetchHarmonics')
   }
 }
 </script>

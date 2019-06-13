@@ -56,6 +56,23 @@ const store = new Vuex.Store({
       commit('strings/setCount', { amount: targetTuning.defaultStrings });
       commit('tuning/setTuning', payload);
       dispatch('fetchMatrix');
+    },
+
+    changeHarmonic({ commit, dispatch, state }, { payload }) {
+      const { root, scale } = state.harmonic;
+      //if(payload.root === root) payload.root = null;
+      //if(payload.scale === scale) payload.scale = null;
+      const newHarmonic = { root, scale, ...payload };
+
+      commit('harmonic/setRoot', newHarmonic.root);
+      commit('harmonic/setScale', newHarmonic.scale);
+
+      if( newHarmonic.root && newHarmonic.scale ) {
+        dispatch('harmonic/findHarmonic');
+      }
+      if( !newHarmonic.root && !newHarmonic.scale ) {
+        commit('harmonic/resetHarmonic');
+      }
     }
   }
 });

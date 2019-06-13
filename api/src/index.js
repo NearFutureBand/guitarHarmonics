@@ -2,6 +2,7 @@
 const Router = require('koa-router');
 const _ = require('lodash');
 const TUNINGS = require('./tunings.json');
+const SCALES = require('./scales.json');
 
 const router = new Router();
 const { createFretMatrix, findHarmonic } = require('./functions');
@@ -43,5 +44,13 @@ router.get('/virtual/api/v1/available-tunings', async (ctx) => {
     handleError(err, ctx);
   }
 });
+
+router.get('/virtual/api/v1/available-harmonics', async (ctx) => {
+  try {
+    ctx.body = SCALES;
+  } catch (err) {
+    handleError(err, ctx);
+  }
+})
 
 module.exports = router;
