@@ -170,6 +170,7 @@ export default {
         flex-flow: column;
         padding: @padding;
         .title{
+          font-weight: 700;
         }
 
         .menu{

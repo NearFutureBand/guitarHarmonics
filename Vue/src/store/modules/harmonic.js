@@ -47,6 +47,9 @@ const harmonic = {
     },
     currentHarmonic: state => {
       return state.harmonic;
+    },
+    isHighlighted: state => note => {
+      return note in state.harmonicNotes;
     }
   },
   actions: {

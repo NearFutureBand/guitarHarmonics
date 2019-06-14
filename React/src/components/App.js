@@ -13,7 +13,7 @@ class App extends Component {
     return (
       <div className="app">
         <Header />
-        <Neck />
+        {/*<Neck />*/}
       </div>
     );
   }

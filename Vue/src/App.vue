@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header />
-    <!--<Neck />-->
+    <Neck />
   </div>
 </template>
 
