@@ -1,5 +1,6 @@
 {
   "Standard" : {
+    "id": "Standard",
     "name": "Standard",
     "formula": "EBGDAEBF#C#",
     "defaultStrings": 6,
@@ -7,6 +8,7 @@
     "tuning": ["E","B","G","D","A","E","B","F#","C#"]
   },
   "EBGDAEA" : {
+    "id" : "EBGDAEA",
     "name": "Drop A (7 strings)",
     "formula": "EBGDAEA",
     "defaultStrings": 7,
@@ -14,6 +16,7 @@
     "tuning": ["E","B","G","D","A","E","A"]
   },
   "EBGDADA" : {
+    "id" : "EBGDADA",
     "name": "EBGDADA",
     "formula": "EBGDADA",
     "defaultStrings": 7,
@@ -21,6 +24,7 @@
     "tuning": ["E","B","G","D","A","D","A"]
   },
   "DAFCGC" : {
+    "id" : "DAFCGC",
     "name": "Drop C",
     "formula": "DAFCGC",
     "defaultStrings": 6,
@@ -28,6 +32,7 @@
     "tuning": ["D","A","F","C","G","C"]
   },
   "EBGDAD" : {
+    "id" : "EBGDAD",
     "name": "Drop D",
     "formula": "EBGDAD",
     "defaultStrings": 6,
@@ -35,6 +40,7 @@
     "tuning": ["E","B","G","D","A","D"]
   },
   "F#C#AEBE" : {
+    "id": "F#C#AEBE",
     "name": "Drop E",
     "formula": "F#C#AEBE",
     "defaultStrings": 6,

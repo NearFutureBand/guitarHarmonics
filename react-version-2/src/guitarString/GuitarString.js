@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Fret from '../fret/Fret';
+import { changeStringCount } from '../guitarString/reducer';
+import { changeFretCount } from '../fret/reducer';
 
 class GuitarString extends Component {
   /*constructor(props) {
@@ -35,4 +37,7 @@ function mapStateToProps( state ) {
   };
 }
 
-export default connect(mapStateToProps)(GuitarString);
+export default connect(mapStateToProps, {
+  changeStringCount,
+  changeFretCount,
+})(GuitarString);
