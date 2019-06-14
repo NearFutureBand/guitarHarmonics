@@ -40,14 +40,14 @@ export default {
     align-items: flex-end;
     position: relative;
     .note{
-      //z-index: 2;
-      //margin-bottom: -@padding/4;
+      z-index: 1;
+      margin-bottom: -@padding/4;
     }
     .light{
       width: @padding*3;
       height: @padding*3;
       border-radius: @padding*1.5;
-      z-index: 1;
+      z-index: 0;
       bottom: -@padding/2;
       position: absolute;
       background-color: rgba(255, 255, 0, .9);

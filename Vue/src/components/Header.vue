@@ -190,7 +190,7 @@ export default {
               flex-flow: column;
               position: absolute;
               top: 100%;
-              z-index: 2;
+              z-index: 10;
               box-shadow: 0 0 5px rgba(0,0,0,.3);
               background-color: @back-color;
               >span{
