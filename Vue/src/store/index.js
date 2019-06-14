@@ -59,19 +59,17 @@ const store = new Vuex.Store({
     },
 
     changeHarmonic({ commit, dispatch, state }, { payload }) {
-      const { root, scale } = state.harmonic;
-      //if(payload.root === root) payload.root = null;
-      //if(payload.scale === scale) payload.scale = null;
-      const newHarmonic = { root, scale, ...payload };
-
-      commit('harmonic/setRoot', newHarmonic.root);
-      commit('harmonic/setScale', newHarmonic.scale);
+      const { harmonic } = state.harmonic;
+      //if(!harmonic.root && payload.root === harmonic.root) payload.root = null;
+      //if(!harmonic.scale && payload.scale === harmonic.scale) payload.scale = null;
+      const newHarmonic = { ...harmonic , ...payload };
+      commit('harmonic/setHarmonic', newHarmonic);
 
       if( newHarmonic.root && newHarmonic.scale ) {
         dispatch('harmonic/findHarmonic');
       }
-      if( !newHarmonic.root && !newHarmonic.scale ) {
-        commit('harmonic/resetHarmonic');
+      if( !newHarmonic.root || !newHarmonic.scale ) {
+        commit('harmonic/resetNotesSelection');
       }
     }
   }

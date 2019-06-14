@@ -4,20 +4,28 @@ import _ from 'lodash';
 const harmonic = {
   namespaced: true,
   state: {
-    harmonicNotes: {},
-    root: null, // - current selected root note
-    scale: null, // - current selected scale of harmonic
-    harmonics: {}
+    harmonicNotes: {}, // - selected notes that are highlighted
+    harmonic: { // - current selected root and scale
+      root: null,
+      scale: null,
+    },
+    scales: {} // - downloaded object with all the info about harmonics
   },
   mutations: {
-    setHarmonic (state, payload) {
+    /** sets what notes should be highlighted */
+    ['setNotesSelection'] (state, payload) {
       state.harmonicNotes = payload;
     },
-    resetHarmonic (state) {
+    /** resets all highlighted notes */
+    resetNotesSelection (state) {
       state.harmonicNotes = {};
     },
-    setHarmonicsList (state, payload) {
-      state.harmonics = payload;
+    /** setter for all scales info */
+    setScales (state, payload) {
+      state.scales = payload;
+    },
+    setHarmonic (state, payload) {
+      state.harmonic = payload;
     },
     setRoot (state, payload) {
       state.root = payload;
@@ -27,8 +35,8 @@ const harmonic = {
     }
   },
   getters: {
-    scales: state => {
-      const ids = _.keys(state.harmonics);
+    scalesIds: state => {
+      const ids = _.keys(state.scales);
       return ids;
     },
     scale: state => {
@@ -36,6 +44,9 @@ const harmonic = {
     },
     root: state => {
       return state.root? state.root : 'root';
+    },
+    currentHarmonic: state => {
+      return state.harmonic;
     }
   },
   actions: {
@@ -43,7 +54,7 @@ const harmonic = {
       const response = await axios
         .get(`http://localhost:3001/virtual/api/v1/available-harmonics`)
         .then(res => res.data);
-      commit('setHarmonicsList', response);
+      commit('setScales', response);
     },
     /**
      * Makes request to the API to get note selection for choosen harmonic
@@ -52,10 +63,9 @@ const harmonic = {
      */
     async findHarmonic({ commit, state }) {
       const response = await axios
-        .get(`http://localhost:3001/virtual/api/v1/harmonic/${state.root}/${state.scale}`)
+        .get(`http://localhost:3001/virtual/api/v1/harmonic/${state.harmonic.root}/${state.harmonic.scale}`)
         .then(res => res.data);
-        console.log(state.root, state.scale, response);
-      commit('setHarmonic', response);
+      commit('setNotesSelection', response);
     }
   }
 }

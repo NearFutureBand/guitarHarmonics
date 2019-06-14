@@ -64,13 +64,13 @@
         <span class="title">harmonic</span>
         <div class="menu">
           <div>
-            <span class="current">{{ root? root : 'root' }}</span>
+            <span class="current">{{ harmonic.root? harmonic.root : 'root' }}</span>
             <div class="dropdown">
               <span
                 v-for="el in ROOTS"
                 :key="el"
-                :class="(el === root)? 'active': ''"
-                @click="() => changeHarmonic({ root: el, scale })"  
+                :class="(el === harmonic.root)? 'active': ''"
+                @click="() => changeHarmonic({ root: el, scale: harmonic.scale })"  
               >
                 {{el}}
               </span>
@@ -78,13 +78,13 @@
           </div>
 
           <div>
-            <span class="current">{{ scale? scale : 'scale' }}</span>
+            <span class="current">{{ harmonic.scale? harmonic.scale : 'scale' }}</span>
             <div class="dropdown">
               <span
                 v-for="el in scales"
                 :key="el"
-                :class="(el === scale )? 'active': ''"
-                @click="() => changeHarmonic({ root, scale: el })"
+                :class="(el === harmonic.scale )? 'active': ''"
+                @click="() => changeHarmonic({ root: harmonic.root, scale: el })"
               >
                 {{el}}
               </span>
@@ -111,15 +111,14 @@ export default {
   computed: {
     ...mapGetters({
       tunings: 'tuning/namesAndIds',
-      scales: 'harmonic/scales',
+      scales: 'harmonic/scalesIds',
     }),
     ...mapState({
-      strings: state => state.strings.count,
-      frets: state => state.frets.count,
+      strings: state => state.strings.count, // - current selected count of strings
+      frets: state => state.frets.count, // - current selected count of frets
       tuningName: state => state.tuning.name,
-      tuningId: state => state.tuning.id,
-      root: state => state.harmonic.root,
-      scale: state => state.harmonic.scale
+      tuningId: state => state.tuning.id, // - cureent selected tuning (by id)
+      harmonic: state => state.harmonic.harmonic, // - current selected harmonic: { root: string, scale: string }
     })
   },
   methods: {
