@@ -1,23 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-plusplus */
-const TUNINGS = require('./tunings/tunings.json');
-const sequence = require('./sequence.json');
-const SCALES = require('./scales/scales.json');
-
-/* const translations = {
-  'C': 'До',
-  'C#': 'До#',
-  'D': 'Рэ',
-  'D#': 'Рэ#',
-  'E': 'Ми',
-  'F': 'Фа',
-  'F#': 'Фа#',
-  'G': 'Соль',
-  'G#': 'Соль#',
-  'A' : 'Ля',
-  'A#': 'Ля#',
-  'B': 'Си'
-} */
+const TUNINGS = require('../data/tunings.json');
+const sequence = require('../data/sequence.json');
+const SCALES = require('../data/scales.json');
 
 /**
  * Makes sure that there's no access to a 13'th note :)

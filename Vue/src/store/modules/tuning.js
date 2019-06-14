@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
+import { API_ADDRESS } from '../../../consts';
 
 const tuning = {
   namespaced: true,
@@ -29,7 +30,7 @@ const tuning = {
   actions: {
     async fetchTunings({ commit }) {
       const response = await axios
-        .get(`http://localhost:3001/virtual/api/v1/available-tunings`)
+        .get(`${API_ADDRESS}/api/tunings`)
         .then(res => res.data);
       commit('setTuningList', response);
     }

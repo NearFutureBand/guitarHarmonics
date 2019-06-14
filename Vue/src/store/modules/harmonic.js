@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-
+import { API_ADDRESS } from '../../../consts';
 const harmonic = {
   namespaced: true,
   state: {
@@ -52,7 +52,7 @@ const harmonic = {
   actions: {
     async fetchHarmonics({ commit }) {
       const response = await axios
-        .get(`http://localhost:3001/virtual/api/v1/available-harmonics`)
+        .get(`${API_ADDRESS}/api/scales`)
         .then(res => res.data);
       commit('setScales', response);
     },
@@ -63,7 +63,12 @@ const harmonic = {
      */
     async findHarmonic({ commit, state }) {
       const response = await axios
-        .get(`http://localhost:3001/virtual/api/v1/harmonic/${state.harmonic.root}/${state.harmonic.scale}`)
+        .get(`${API_ADDRESS}/api/harmonics`, {
+          params: {
+            root: state.harmonic.root,
+            scale: state.harmonic.scale
+          }
+        })
         .then(res => res.data);
       commit('setNotesSelection', response);
     }

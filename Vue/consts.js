@@ -1,0 +1,1 @@
+export const API_ADDRESS = 'https://guitar-harmonics-api.theflashofsonic.now.sh';

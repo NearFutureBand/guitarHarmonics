@@ -50,6 +50,7 @@ body {
 }
 *{
   box-sizing: border-box;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 div{
   display: flex;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { API_ADDRESS } from '../../consts';
 
 import strings from './modules/strings';
 import frets from './modules/frets';
@@ -8,6 +9,7 @@ import tuning from './modules/tuning';
 import harmonic from './modules/harmonic';
 
 Vue.use(Vuex);
+
 
 const store = new Vuex.Store({
   modules: {
@@ -32,9 +34,13 @@ const store = new Vuex.Store({
   actions: {
     async fetchMatrix ({ commit, state }) {
       const response = await axios
-        .get(
-          `http://localhost:3001/vitrual/api/v1/fretboard/${state.tuning.id}/${state.strings.count}/${state.frets.count}`
-        ).then( res => res.data);
+        .get(`${API_ADDRESS}/api/fretboard`, {
+          params: {
+            tuning: state.tuning.id,
+            strings: state.strings.count,
+            frets: state.frets.count
+          }
+        }).then( res => res.data);
       commit('setMatrix', response);
     },
 
