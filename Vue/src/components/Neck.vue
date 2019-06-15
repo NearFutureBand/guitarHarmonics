@@ -40,8 +40,11 @@ export default {
     .neck{
       background-color: #eee;
       width: 100%;
-      height: 50vh;
+      height: 60vh;
       flex-flow: column;
+      @media (max-height: 500px){
+        height: 80vh;
+      }
     }
   }
   

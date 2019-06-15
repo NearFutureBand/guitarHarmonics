@@ -46,5 +46,29 @@
     "defaultStrings": 6,
     "maxStrings": 6,
     "tuning": ["F#","C#","A","E","B","E"]
+  },
+  "DAFCGDG" : {
+    "id" : "DAFCGDG",
+    "name": "Drop G (7 strings)",
+    "formula": "DAFCGDG",
+    "defaultStrings": 7,
+    "maxStrings": 7,
+    "tuning": ["D","A","F","C","G","D","G"]
+  },
+  "DAFCGCG" : {
+    "id" : "DAFCGCG",
+    "name": "Drop CG",
+    "formula": "DAFCGCG",
+    "defaultStrings": 7,
+    "maxStrings": 7,
+    "tuning": ["D","A","F","C","G","C","G"]
+  },
+  "DAEGCG" : {
+    "id" : "DAEGCG",
+    "name": "Drop G (6 string)",
+    "formula": "DAEGCG",
+    "defaultStrings": 6,
+    "maxStrings": 6,
+    "tuning": ["D","A","E","G","C","G"]
   }
 }

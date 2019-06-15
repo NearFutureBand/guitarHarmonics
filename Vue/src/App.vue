@@ -46,6 +46,9 @@ body {
     overflow-x: scroll;
     justify-content: center;
     align-content: center;
+    @media (max-height: 500px) {
+      justify-content: flex-end;
+    }
   }
 }
 *{

@@ -70,7 +70,7 @@
                 v-for="el in ROOTS"
                 :key="el"
                 :class="(el === harmonic.root)? 'active': ''"
-                @click="() => changeHarmonic({ root: el, scale: harmonic.scale })"  
+                @click="() => changeHarmonic({ root: el })"  
               >
                 {{el}}
               </span>
@@ -84,7 +84,7 @@
                 v-for="el in scales"
                 :key="el"
                 :class="(el === harmonic.scale )? 'active': ''"
-                @click="() => changeHarmonic({ root: harmonic.root, scale: el })"
+                @click="() => changeHarmonic({ scale: el })"
               >
                 {{el}}
               </span>

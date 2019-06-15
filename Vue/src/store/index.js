@@ -66,8 +66,8 @@ const store = new Vuex.Store({
 
     changeHarmonic({ commit, dispatch, state }, { payload }) {
       const { harmonic } = state.harmonic;
-      //if(!harmonic.root && payload.root === harmonic.root) payload.root = null;
-      //if(!harmonic.scale && payload.scale === harmonic.scale) payload.scale = null;
+      if( payload.root === harmonic.root ) payload.root = null;
+      if( payload.scale === harmonic.scale ) payload.scale = null;
       const newHarmonic = { ...harmonic , ...payload };
       commit('harmonic/setHarmonic', newHarmonic);
 
