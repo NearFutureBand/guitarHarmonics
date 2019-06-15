@@ -1,0 +1,22 @@
+$back-color: #eee;
+$text-color: #333;
+$padding: 1rem;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+div {
+  display: flex;
+  flex-direction: row;
+}
+
+@import './css/App.scss';
+@import './css/Neck.scss';
+@import './css/Fret.scss';
+@import './css/Header.scss';

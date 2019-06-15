@@ -1,0 +1,63 @@
+.header-wrapper {
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.header-wrapper .header {
+  background-color: $back-color;
+  justify-content: space-around;
+}
+
+.header-wrapper .header .nav-block{
+  align-items: center;
+  flex-flow: column;
+  padding: $padding;
+}
+.header-wrapper .header .nav-block .title{
+  font-weight: 600;
+}
+.header-wrapper .header .nav-block .menu{
+  flex-flow: row;
+  width: 100%;
+}
+.header-wrapper .header .nav-block .menu > div{
+  flex-flow: column;
+  position: relative;
+  align-items: center;
+  width: 100%;
+}
+.header-wrapper .header .nav-block .menu > div .current{
+  padding: 0 $padding*2;
+}
+.header-wrapper .header .nav-block .menu > div .current:hover{
+  cursor: pointer;     
+}
+.header-wrapper .header .nav-block .menu > div .dropdown{
+  display: none;
+  flex-flow: column;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 2;
+  box-shadow: 0 0 5px rgba(0,0,0,.3);
+  background-color: $back-color;
+}
+.header-wrapper .header .nav-block .menu > div .dropdown > span{
+  padding: $padding/2 $padding*2;
+  text-align: center;
+}
+.header-wrapper .header .nav-block .menu > div .dropdown > span:hover{
+  cursor: pointer;
+  background-color: $back-color + #333;
+}
+.header-wrapper .header .nav-block .menu > div .dropdown >span.active{
+  background-color: $back-color - #222;
+}
+.header-wrapper .header .nav-block .menu > div:hover .dropdown{
+  display: flex;
+}
+.header-wrapper .header .nav-block:hover{
+  background-color: $back-color - #333;
+}
