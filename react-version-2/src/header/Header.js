@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+
+import { fetchTunings, changeTuning } from '../tuning/reducer';
+import { changeFretCount } from '../fret/reducer';
+import { changeStringCount } from '../guitarString/reducer';
 
 class Header extends Component {
   constructor(props) {
@@ -8,8 +13,21 @@ class Header extends Component {
     this.fretsRange = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
   }
 
+  componentDidMount = () => {
+    this.props.fetchTunings();
+  }
+
   render() {
-    const { strings, frets, changeFretCount, changeStringCount } = this.props;
+    const {
+      strings,
+      frets,
+      tuning,
+      changeFretCount,
+      changeStringCount,
+      changeTuning,
+      tunings,
+      tuningsLoaded,
+    } = this.props;
 
     return (
       <header className="header-wrapper">
@@ -26,7 +44,7 @@ class Header extends Component {
                     this.stringsRange.map( (el) => {
                       return <span
                         key={el}
-                        onClick={ () => changeStringCount(el, 'Standard') }
+                        onClick={ () => changeStringCount(el, tuning) }
                         className={(el === strings ) ? 'active' : ''}
                       >
                         {el}
@@ -60,6 +78,30 @@ class Header extends Component {
             </div>
           </div>
 
+          {<div className="nav-block">
+            <span className="title">tuning</span>
+            <div className="menu">
+              { tuningsLoaded &&
+                <div>
+                  <span className="current">{tuning.name}</span>
+                  <div className="dropdown">
+                    {
+                      tunings.map( (el) => {
+                        return <span
+                          key={el.id}
+                          onClick={ () => changeTuning(el) }
+                          className={(el.id === tuning.id ) ? 'active' : ''}
+                        >
+                          {el.name}
+                        </span>; 
+                      })
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>}
+
 
         </div>
       </header>
@@ -70,6 +112,14 @@ class Header extends Component {
 const mapStateToProps = state => ({
   strings: state.strings.count,
   frets: state.frets.count,
+  tuningsLoaded: state.tuning.tuningsLoaded,
+  tuning: state.tuning.tuning,
+  tunings: _.values(state.tuning.tunings),
 });
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { 
+  fetchTunings,
+  changeTuning,
+  changeFretCount,
+  changeStringCount,
+})(Header);

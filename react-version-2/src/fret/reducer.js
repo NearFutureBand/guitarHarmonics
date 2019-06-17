@@ -14,7 +14,10 @@ const initialState = {
 export const FretsReducer = (state = initialState, { type, payload }) => {
 
   if ( type === CHANGE_FRET_COUNT) {
-    return payload;
+    return {
+      ...state,
+      count: payload,
+    };
   }
 
   return state;

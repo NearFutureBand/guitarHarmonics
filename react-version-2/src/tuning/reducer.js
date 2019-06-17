@@ -5,10 +5,10 @@ export const SET_DEFAULT_TUNING = 'SET_DEFAULT_TUNING';
 export const FETCH_TUNINGS_START = 'FETCH_TUNINGS_START';
 export const FETCH_TUNINGS_SUCCESS = 'FETCH_TUNINGS_SUCCESS';
 
-export const changeTuning = (tuningId) => {
+export const changeTuning = (tuning) => {
   return {
     type: CHANGE_TUNING,
-    payload: tuningId,
+    payload: tuning,
   };
 };
 export const setDefautlTuning = () => {
@@ -37,13 +37,12 @@ export const fetchTunings = () => {
 //import { getTuningByName } from '../util/functions';
 
 const initialState = {
-  tuningId: 'Standard',
-  tuning: {},
-  tunings: {},
+  tuning: null,
+  tunings: null,
+  tuningsLoaded: false,
 };
 
 export const TuningReducer = (state = initialState, { type, payload }) => {
-  console.log(type, payload);
   switch (type) {
 
     case FETCH_TUNINGS_START:
@@ -51,12 +50,17 @@ export const TuningReducer = (state = initialState, { type, payload }) => {
     case FETCH_TUNINGS_SUCCESS:
       return {
         ...state,
+        tuning: payload['Standard'],
         tunings: payload,
+        tuningsLoaded: true,
       };
 
 
     case CHANGE_TUNING:
-      return state;
+      return {
+        ...state,
+        tuning: payload,
+      };
     default: return state;
   }
 };
