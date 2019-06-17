@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { fetchTunings, changeTuning } from '../tuning/reducer';
 import { changeFretCount } from '../fret/reducer';
 import { changeStringCount } from '../guitarString/reducer';
+import { fetchMatrix } from '../neck/reducer';
 
 class Header extends Component {
   constructor(props) {
@@ -15,6 +16,21 @@ class Header extends Component {
 
   componentDidMount = () => {
     this.props.fetchTunings();
+  }
+
+  componentDidUpdate = (prevProps) => {
+    const { tuning, strings, frets } = this.props;
+    console.log();
+    if (
+     
+      ( tuning && !prevProps.tuning ) || 
+        tuning.id !== prevProps.tuning.id ||
+        strings !== prevProps.strings ||
+        frets !== prevProps.frets
+      
+    ) {
+      this.props.fetchMatrix(strings, frets, tuning);
+    }
   }
 
   render() {
@@ -122,4 +138,5 @@ export default connect(mapStateToProps, {
   changeTuning,
   changeFretCount,
   changeStringCount,
+  fetchMatrix,
 })(Header);

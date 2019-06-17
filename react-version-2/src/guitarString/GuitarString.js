@@ -12,7 +12,7 @@ class GuitarString extends Component {
   }*/
 
   render() {
-    const { frets } = this.props;
+    const { frets, number } = this.props;
 
     return (
       <div

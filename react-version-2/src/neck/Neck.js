@@ -4,10 +4,6 @@ import GuitarString from '../guitarString/GuitarString';
 import { fetchMatrix } from './reducer';
 
 class Neck extends Component {
-  
-  componentDidMount = () => {
-    this.props.fetchMatrix('', '', '');
-  } 
 
   render() {
     const { strings } = this.props;
@@ -26,7 +22,9 @@ class Neck extends Component {
 }
 
 const mapStateToProps = state => ({
-  strings: state.strings.count, 
+  strings: state.strings.count,
+  frets: state.frets.count,
+  tuning: state.tuning.tuning,
 });
 
 export default connect(mapStateToProps, { fetchMatrix })(Neck);

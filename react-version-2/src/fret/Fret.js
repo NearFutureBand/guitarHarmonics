@@ -16,7 +16,7 @@ class Fret extends Component {
 
 
 const mapStateToProps = ( state ) => {
-  return { 
+  return {
     
   };
 };
