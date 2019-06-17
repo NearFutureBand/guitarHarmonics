@@ -25,9 +25,10 @@ class Fret extends Component {
 
 const mapStateToProps = ( state, ownProps ) => {
   const { pos } = ownProps;
+  const note = state.neck.matrixLoading ? '' : state.neck.matrix[pos[0]][pos[1]];
   return {
-    note: state.neck.matrixLoading ? '' : state.neck.matrix[pos[0]][pos[1]],
-    highlighted: false,
+    note,
+    highlighted: note in state.harmonic.selection,
   };
 };
 

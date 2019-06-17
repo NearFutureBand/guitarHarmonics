@@ -1,56 +1,61 @@
 {
   "minor" : {
+    "id": "minor",
     "name": {
       "en" : "Aeolian (Natural minor)",
       "ru" : "Эолийский (Натуральный минор)"
     },
     "shortName" : {
-      "en" : "minor",
-      "ru" : "минор"
+      "en" : "Min",
+      "ru" : "Мин"
     },
     "formula": "WHWWHWW"
   },
   "melodicMinor" : {
+    "id" : "melodicMinor",
     "name": {
       "en" : "Melodic minor",
       "ru" : "Мелодический минор"
     },
     "shortName" : {
-      "en" : "melodicMinor",
-      "ru" : "мелодический минор"
+      "en" : "MelMin",
+      "ru" : "МелМин"
     },
     "formula": "WHWWH3H"
   },
   "major" : {
+    "id": "major",
     "name": {
       "en" : "Ionian (Natural major)",
       "ru" : "Ионийский (Натуральный мажор)"
     },
     "shortName" : {
-      "en" : "major",
-      "ru" : "мажор"
+      "en" : "Maj",
+      "ru" : "Маж"
     },
     "formula": "WWHWWWH"
   },
   "phrygian" : {
+    "id" : "phrygian",
     "name": {
       "en" : "Phrygian",
       "ru" : "Фригийский"
     },
     "shortName" : {
-      "en": "phrygian",
-      "ru" : "фригийский"
+      "en": "Phry",
+      "ru" : "Фриг"
     },
     "formula": "HWWWHWW"
   },
   "locrian" : {
+    "id" : "locrian",
     "name": {
       "en" : "Locrian",
       "ru" : "Локрийский"
     },
     "shortName": {
-      "en": "locrian",
-      "ru" : "локрийский"
+      "en": "Loc",
+      "ru" : "Лок"
     }, 
     "formula": "HWWHWWW"
   }
