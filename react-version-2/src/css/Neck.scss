@@ -1,5 +1,22 @@
 .neck{
+  background-color: $back-color;
   width: 100%;
-  background-color: grey;
-  flex-direction: column;
+  height: 50vh;
+  flex-flow: column;
+  min-width: 1500px;
+  z-index: 0;
+  
+  /*@media (max-width: 992px) {
+      height: 60vh;
+  }*/
+  @media (min-width: 577px) and (max-width: 768px) {
+      height: 70vh;
+      min-width: 2000px;
+      //background-color: aqua;
+  }
+  @media (max-height: 500px){
+    height: 80vh;
+  }
+  //@media (max-width: 576px)
+  
 }

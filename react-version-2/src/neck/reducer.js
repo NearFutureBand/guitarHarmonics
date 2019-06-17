@@ -33,6 +33,7 @@ export const fetchMatrix = (strings, frets, tuning) => {
 
 const initialState = {
   matrix: [],
+  matrixLoading: true,
 };
 
 export const NeckReducer = (state = initialState, {type, payload}) => {
@@ -41,6 +42,7 @@ export const NeckReducer = (state = initialState, {type, payload}) => {
       return {
         ...state,
         matrix: payload,
+        matrixLoading: false,
       };
     default: return state;
   }

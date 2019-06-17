@@ -6,4 +6,7 @@
   left: 0;
   justify-content: center;
   flex-direction: column;
+  @media (max-height: 500px) {
+    justify-content: flex-end;
+  }
 }

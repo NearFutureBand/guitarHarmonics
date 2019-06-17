@@ -17,12 +17,12 @@ class GuitarString extends Component {
     return (
       <div
         className="string"
-        //id={`string-${number}`}
+        id={`string-${number}`}
         //style={{ borderBottom: `${ this.stringWidth[number-1] }px solid gray` }}
       >
         {
           new Array(frets + 1).fill(0).map( (el, i) => {
-            return <Fret key={i} pos={[i, i]}/>;
+            return <Fret key={i} pos={[number, i]}/>;
           })
         }
       </div>

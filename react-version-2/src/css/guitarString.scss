@@ -1,0 +1,8 @@
+.string{
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid gray;
+}
+.string:first-child{
+  border: none;
+}
