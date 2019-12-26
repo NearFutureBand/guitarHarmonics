@@ -6,9 +6,9 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
 import './index.scss';
-import App from './app/App';
+import App from './App';
 import * as serviceWorker from './serviceWorker';
-import reducer from './reducer';
+import reducer from 'reducers';
 
 const store = createStore(
   reducer,
