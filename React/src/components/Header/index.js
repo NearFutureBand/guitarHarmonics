@@ -11,12 +11,10 @@ const Header = () => {
   const tuningId = useSelector(selectors.getTuningId);
 
   const stringsRange = useSelector((state) => selectors.getStringNumberOptions(state, tuningId));
-  /*constructor(props) {
-    super(props);
-    this.stringsRange = [4, 5, 6, 7, 8, 9];
-    this.fretsRange = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
-    this.rootsRange = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
-  }*/
+  
+  useEffect(() => {
+    dispatch(actions.updateMatrixRequest.call({ tuning: tuningId, frets, strings }));
+  }, []);
 
   /*componentDidMount = () => {
     this.props.fetchTunings();

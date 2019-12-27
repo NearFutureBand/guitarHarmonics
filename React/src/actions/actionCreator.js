@@ -19,7 +19,7 @@ const createAction = (type) => {
 
         // get token if we have
     
-        const config = actionParams[type];
+        const config = actionParams[type](payload);
         const response = await axiosInstance.request(config);
         return dispatch({
           type: `${type}_SUCCESS`,

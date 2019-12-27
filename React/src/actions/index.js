@@ -1,4 +1,3 @@
-
 import createAction from './actionCreator';
 export * from './NeckActions';
 
