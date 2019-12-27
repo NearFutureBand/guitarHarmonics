@@ -2,7 +2,7 @@ import {changeNumberOfStrings, updateMatrixRequest} from 'actions';
 
 const initialState = {
   matrix: [],
-  matrixLoading: true,
+  matrixLoading: false,
   frets: 24,
   strings: 6,
   tuningId: 'Standard',

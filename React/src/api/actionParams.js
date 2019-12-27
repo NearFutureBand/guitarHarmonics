@@ -15,7 +15,7 @@ export default {
     method: METHODS.get,
   }),
   'UPDATE_MATRIX_REQUEST': (params) => ({
-    url: 'fretboard',
+    url: 'matrix',
     headers: {},
     method: METHODS.get,
     params,
