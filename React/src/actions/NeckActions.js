@@ -1,4 +1,8 @@
 import axios from 'axios';
+import createAction from './actionCreator';
+
+export const changeNumberOfStrings = createAction('CHANGE_NUMBER_OF_STRINGS');
+
 
 export const FETCH_MATRIX_START = 'FETCH_MATRIX_START';
 export const FETCH_MATRIX_SUCCESS = 'FETCH_MATRIX_SUCCESS';

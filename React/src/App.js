@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import * as actions from 'actions';
-/*import Header from '../header/Header';
-import Neck from '../neck/Neck';*/
+import Header from 'components/Header';
+/*import Neck from '../neck/Neck';*/
 
 const App = () => {
 
@@ -16,8 +16,8 @@ const App = () => {
 
   return (
     <div className="app">
-      {/*<Header />
-        <Neck />*/}
+      <Header />
+      {/*<Neck />*/}
     </div>
   );
 

@@ -1,4 +1,4 @@
-import {FETCH_MATRIX_SUCCESS} from 'actions';
+import {FETCH_MATRIX_SUCCESS, changeNumberOfStrings} from 'actions';
 
 const initialState = {
   matrix: [],
@@ -15,6 +15,11 @@ const NeckReducer = (state = initialState, { type, payload }) => {
         ...state,
         matrix: payload,
         matrixLoading: false,
+      };
+    case changeNumberOfStrings.type:
+      return {
+        ...state,
+        strings: payload,
       };
     default: return state;
   }
