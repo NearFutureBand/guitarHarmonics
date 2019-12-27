@@ -9,7 +9,8 @@ const App = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.getAllTunings());
+    dispatch(actions.getAllTuningsRequest.call());
+    dispatch(actions.getAllScalesRequest.call());
   }, []);
   
 

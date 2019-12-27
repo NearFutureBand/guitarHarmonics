@@ -1,16 +1,7 @@
-import Axios from 'axios';
 
+import createAction from './actionCreator';
 export * from './NeckActions';
 
-export const GET_ALL_TUNINGS_START = 'GET_ALL_TUNINGS_START';
-export const GET_ALL_TUNINGS_SUCCESS = 'GET_ALL_TUNINGS_SUCCESS';
-export const GET_ALL_TUNINGS_FAILURE = 'GET_ALL_TUNINGS_FAILURE';
 
-export const getAllTunings = () => {
-  return async (dispatch) => {
-    dispatch({ type: GET_ALL_TUNINGS_START });
-
-    const response = await Axios.get(`https://guitar-harmonics-api.theflashofsonic.now.sh/api/tunings`);
-    return dispatch({ type: GET_ALL_TUNINGS_SUCCESS, payload: response.data});
-  };
-};
+export const getAllTuningsRequest = createAction('GET_ALL_TUNINGS_REQUEST');
+export const getAllScalesRequest = createAction('GET_ALL_SCALES_REQUEST');

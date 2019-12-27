@@ -1,4 +1,5 @@
-import {GET_ALL_TUNINGS_SUCCESS} from 'actions';
+
+import { getAllTuningsRequest } from 'actions';
 
 const initialState = {
   tunings: {},
@@ -6,7 +7,7 @@ const initialState = {
 
 const TuningsReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case GET_ALL_TUNINGS_SUCCESS:
+    case getAllTuningsRequest.success:
       return {
         ...state,
         tunings: payload,
