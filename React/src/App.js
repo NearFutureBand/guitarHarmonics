@@ -5,15 +5,15 @@ import * as actions from 'actions';
 
 import Header from 'components/Header';
 import Neck from 'components/Neck';
-import { setNumberOfStrings } from 'redux/Neck';
+
+import { /*getAllTunings, */getAllScales } from 'redux/actions';
 
 const App = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    //dispatch(actions.getAllTuningsRequest.call());
-    //dispatch(actions.getAllScalesRequest.call());
-    dispatch(setNumberOfStrings(4));
+    dispatch(getAllScales());
+    //dispatch(getAllTunings());
   }, []);
   
 

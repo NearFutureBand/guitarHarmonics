@@ -23,8 +23,8 @@
       "navigation/*": [
         "./src/navigation/*"
       ],
-      "reducers/*": [
-        "./src/reducers/*"
+      "redux/*": [
+        "./src/redux/*"
       ],
       "screens/*": [
         "./src/screens/*"

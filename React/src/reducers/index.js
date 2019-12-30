@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import NeckReducer from '../redux/Neck';
-import TuningsReducer from './TuningsReducer';
+import TuningsReducer from '../redux/Tunings';
 import ScalessReducer from './ScalesReducer';
 
 export default combineReducers({
