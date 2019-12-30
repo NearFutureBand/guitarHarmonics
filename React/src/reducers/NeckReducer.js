@@ -1,4 +1,10 @@
-import {changeNumberOfStrings, updateMatrixRequest} from 'actions';
+import {
+  changeNumberOfStrings,
+  updateMatrixRequest,
+  setTuningId,
+  setScaleMode,
+  setScaleTonic,
+} from 'actions';
 
 const initialState = {
   matrix: [],
@@ -6,6 +12,10 @@ const initialState = {
   frets: 24,
   strings: 6,
   tuningId: 'Standard',
+  scale: {
+    tonic: null,
+    mode: null,
+  },
 };
 
 const NeckReducer = (state = initialState, { type, payload }) => {
@@ -19,6 +29,27 @@ const NeckReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         matrix: payload,
+      };
+    case setTuningId.type:
+      return {
+        ...state,
+        tuningId: payload,
+      };
+    case setScaleTonic.type:
+      return {
+        ...state,
+        scale: {
+          ...state.scale,
+          tonic: payload,
+        },
+      };
+    case setScaleMode.type:
+      return {
+        ...state,
+        scale: {
+          ...state.scale,
+          mode: payload,
+        },
       };
     default: return state;
   }

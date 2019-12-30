@@ -1,8 +1,6 @@
 .string{
-  width: 100%;
-  height: 100%;
-  border-bottom: 1px solid gray;
+  flex: 1
 }
-.string:first-child{
-  border: none;
+.string:last-child{
+  //flex: 0.5;
 }

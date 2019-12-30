@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as actions from 'actions';
 import Header from 'components/Header';
-/*import Neck from '../neck/Neck';*/
+import Neck from 'components/Neck';
 
 const App = () => {
 
@@ -17,7 +17,7 @@ const App = () => {
   return (
     <div className="app">
       <Header />
-      {/*<Neck />*/}
+      <Neck />
     </div>
   );
 

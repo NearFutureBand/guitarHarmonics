@@ -1,6 +1,7 @@
 $back-color: #eee;
 $text-color: #333;
 $padding: 1rem;
+$zeroFretWidth: 3rem;
 
 body {
   margin: 0;
@@ -18,6 +19,6 @@ div {
 
 @import './css/App.scss';
 @import './css/Neck.scss';
-@import './css/guitarString.scss';
+@import './css/GuitarString.scss';
 @import './css/Fret.scss';
 @import './css/Header.scss';

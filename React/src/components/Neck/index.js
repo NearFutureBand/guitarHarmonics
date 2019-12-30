@@ -1,30 +1,31 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import GuitarString from '../guitarString/GuitarString';
-import { fetchMatrix } from './reducer';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import GuitarString from 'components/GuitarString';
+import { getMatrix, getStrings, getZeroFretNotes } from 'selectors';
 
-class Neck extends Component {
+const Neck = () => {
 
-  render() {
-    const { strings } = this.props;
-    
-    return (
-      <div className="neck">
-        {
-          new Array(strings + 1).fill(0).map( (el, i) => {
-            return <GuitarString key={i} number={i}/>; 
-          })
-        }
-        
+  const matrix = useSelector(getMatrix);
+  const strings = useSelector(getStrings);
+
+  const zeroFrets = useSelector(getZeroFretNotes);
+
+  return (
+    <div className="neck">
+      <div className="nut">
+        {zeroFrets.map((el, i) => (
+          <GuitarString key={i} number={i} frets={[el]} isSideDotsLine={i === strings} isZeroFrets />
+        ))}
       </div>
-    );
-  }
-}
+      <div className="fretboard">
+        {matrix.map( (el, i) => {
+          return <GuitarString key={i} number={i} frets={matrix[i]} isSideDotsLine={i === strings} />;
+        })}
+      </div>
+      
+    </div>
+  );
 
-const mapStateToProps = state => ({
-  strings: state.strings.count,
-  frets: state.frets.count,
-  tuning: state.tuning.tuning,
-});
+};
 
-export default connect(mapStateToProps, { fetchMatrix })(Neck);
+export default Neck;

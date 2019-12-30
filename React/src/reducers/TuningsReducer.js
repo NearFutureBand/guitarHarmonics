@@ -1,4 +1,3 @@
-
 import { getAllTuningsRequest } from 'actions';
 
 const initialState = {
