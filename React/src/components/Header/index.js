@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as selectors from 'selectors';
-import * as actions from 'actions';
+import * as actions from 'redux/actions';
 import { convertNoteSequenceForPicker } from 'helpers';
 
 const Header = () => {
@@ -25,7 +25,7 @@ const Header = () => {
   
   useEffect(() => {
     dispatch(
-      actions.updateMatrixRequest.call({ tuning: tuningId, frets, strings })
+      actions.updateMatrix({ tuning: tuningId, frets, strings })
     );
   }, [dispatch, tuningId, frets, strings]);
 
@@ -45,7 +45,7 @@ const Header = () => {
                       key={el.value}
                       role="button"
                       tabIndex="0"
-                      onClick={ () => dispatch(actions.changeNumberOfStrings.call(el.value)) }
+                      onClick={ () => dispatch(actions.setNumberOfStrings(el.value)) }
                       className={(el.value === strings ) ? 'active' : ''}
                     >
                       {el.label}
@@ -64,19 +64,17 @@ const Header = () => {
             <div>
               <span className="current">{tuningName}</span>
               <div className="dropdown">
-                {
-                  tuningsRange.map( (el) => {
-                    return <span
-                      key={el.value}
-                      role="button"
-                      tabIndex="0"
-                      onClick={ () => dispatch(actions.setTuningId.call(el.value)) }
-                      className={(el.value === tuningId ) ? 'active' : ''}
-                    >
-                      {el.label}
-                    </span>;
-                  })
-                }
+                {tuningsRange.map( (el) => {
+                  return <span
+                    key={el.value}
+                    role="button"
+                    tabIndex="0"
+                    onClick={ () => dispatch(actions.setTuningId(el.value)) }
+                    className={(el.value === tuningId ) ? 'active' : ''}
+                  >
+                    {el.label}
+                  </span>;
+                })}
               </div>
             </div>
             
@@ -95,7 +93,7 @@ const Header = () => {
                     key={el.value}
                     role="button"
                     tabIndex="0"
-                    onClick={() => dispatch(actions.setScaleTonic.call(el.value))}
+                    onClick={() => dispatch(actions.setScaleTonic(el.value))}
                     className={(el.value === scale.tonic ) ? 'active' : ''}
                   >
                     {el.label}
@@ -112,7 +110,7 @@ const Header = () => {
                     key={el.value}
                     role="button"
                     tabIndex="0"
-                    onClick={() => dispatch(actions.setScaleMode.call(el.value))}
+                    onClick={() => dispatch(actions.setScaleMode(el.value))}
                     className={(el.value === scale.mode ) ? 'active' : ''}
                   >
                     {el.label}

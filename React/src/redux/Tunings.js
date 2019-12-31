@@ -2,14 +2,14 @@ import createPieceOfState from './create';
 
 const [createAction, createReducer] = createPieceOfState();
 
-/*export const getAllTunings = createAction({
+export const getAllTunings = createAction({
   type: 'GET_ALL_TUNINGS',
   onSuccess: (state, action) => ({ ...state, tunings: action.response.data }),
-  requestConfig: {
+  requestConfig: () => ({
     url: 'tunings',
     headers: {},
     method: 'get',
-  },
-});*/
+  }),
+});
 
 export default createReducer({ tunings: {}});

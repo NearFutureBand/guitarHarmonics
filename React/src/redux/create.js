@@ -4,24 +4,36 @@ const successType = type => `${type}_SUCCESS`;
 const startType = type => `${type}_START`;
 const failureType = type => `${type}_FAILURE`;
 
-const makeRequest = (type, payload, requestConfig) => {
+const makeRequest = (
+  type,
+  payload,
+  requestConfig,
+  onSuccessCallback,
+  onFailureCallback
+) => {
   return async (dispatch) => {
     dispatch({type: startType(type), payload});
 
     try {
-      const response = await axiosInstance.request(requestConfig);
-      return dispatch({
+      const response = await axiosInstance.request(requestConfig(payload));
+      dispatch({
         type: successType(type),
         payload,
         response,
       });
+      if (onSuccessCallback) {
+        onSuccessCallback(dispatch);
+      }
     } catch (error) {
       console.log(error);
-      return dispatch({
+      dispatch({
         type: failureType(type),
         payload,
         error,
       });
+      if (onFailureCallback) {
+        onFailureCallback(dispatch);
+      }
     }
   };
 };
@@ -31,11 +43,19 @@ const createAction = ({
   type,
   onStart = (state) => ({ ...state}),
   onSuccess = (state) => ({ ...state}),
+  onSuccessCallback,
   onFailure = (state) => ({ ...state}),
+  onFailureCallback,
   requestConfig,
 }) => {
   const actionCreator = requestConfig ?
-    (payload) => makeRequest(type, payload, requestConfig) :
+    (payload) => makeRequest(
+      type,
+      payload,
+      requestConfig,
+      onSuccessCallback,
+      onFailureCallback
+    ) :
     (payload) => ({type, payload});
   if (requestConfig) {
     reducerMap[startType(type)] = onStart;
@@ -49,7 +69,6 @@ const createAction = ({
 
 const createReducer = (defaultState, reducerMap) => {
   return (state = defaultState, action) => {
-    console.log(state, action, reducerMap);
     return action.type in reducerMap ?
       reducerMap[action.type](state, action) :
       { ...state};

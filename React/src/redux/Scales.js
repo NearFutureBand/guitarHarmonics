@@ -4,12 +4,15 @@ const [createAction, createReducer] = createPieceOfState();
 
 export const getAllScales = createAction({
   type: 'GET_ALL_SCALES',
-  onSuccess: (state, action) => ({ ...state, scales: action.response.data }),
-  requestConfig: {
+  onSuccess: (state, action) => {
+    return { ...state, scales: action.response.data };
+  },
+  requestConfig: () => ({
     url: 'scales',
     headers: {},
     method: 'get',
-  },
+  }),
 });
 
-export default createReducer({ scales: {}});
+const ScalesReducer = createReducer({ scales: {} });
+export default ScalesReducer;

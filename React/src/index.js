@@ -8,7 +8,7 @@ import logger from 'redux-logger';
 import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import reducer from 'reducers';
+import reducer from 'redux/reducer';
 
 const store = createStore(
   reducer,
